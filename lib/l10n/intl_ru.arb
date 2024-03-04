@@ -1,0 +1,13 @@
+{
+  "@@locale": "ru",
+  "appTitle": "My CEITI",
+  "settings": "Настройки",
+  "appearance": "Внешний вид",
+  "themeMode": "Режим темы",
+  "lightTheme" : "Светлая",
+  "darkTheme" : "Темная",
+  "systemTheme" : "Системная",
+  "language": "Язык",
+  "schedule": "Расписание Пар",
+  "grades": "Оценки"
+}

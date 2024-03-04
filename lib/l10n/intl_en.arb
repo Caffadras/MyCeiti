@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "appTitle": "My CEITI",
+  "settings": "Settings",
+  "appearance": "Appearance",
+  "themeMode": "Theme Mode",
+  "lightTheme" : "Light",
+  "darkTheme" : "Dark",
+  "systemTheme" : "System",
+  "language": "Language",
+  "schedule": "Lessons Schedule",
+  "grades": "Grades"
+}
