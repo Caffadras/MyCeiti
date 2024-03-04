@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_ceiti/pages/settings/settings_page.dart';
-import 'package:my_ceiti/themes/dark_theme.dart';
-import 'package:my_ceiti/themes/light_theme.dart';
-import 'package:my_ceiti/themes/theme_manager.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
