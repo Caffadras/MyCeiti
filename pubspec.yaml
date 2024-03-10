@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.1.1
   flutter_bloc: ^8.1.4
   theme_manager: ^2.0.4
+  http: ^1.2.1
+  dropdown_search: ^5.0.6
   flutter_localization: ^0.2.0
   intl:
 

@@ -8,6 +8,7 @@
   "darkTheme" : "Темная",
   "systemTheme" : "Системная",
   "language": "Язык",
-  "schedule": "Расписание Пар",
-  "grades": "Оценки"
+  "schedulePage": "Расписание Пар",
+  "gradesPage": "Оценки",
+  "groupName": "Группа"
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_ceiti/pages/content/grades_page.dart';
+import 'package:my_ceiti/pages/content/shedule_page.dart';
 import 'package:my_ceiti/pages/settings/settings_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -12,14 +14,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedWidgetIndex = 0;
+
+  final List<Widget>_pages = [
+    SchedulePage(),
+    GradesPage()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
-        drawer:
-        Drawer(
+        drawer: Drawer(
           child: Column(
             children: [
               Expanded(
@@ -37,14 +45,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     ListTile(
-                      title: Text(AppLocalizations.of(context)!.schedule),
+                      title: Text(AppLocalizations.of(context)!.schedulePage),
                       onTap: () {
+                        setState(() {
+                          _selectedWidgetIndex = 0;
+                        });
+                        Navigator.pop(context); // Close the drawer
                         // Handle the tap
                       },
                     ),
                     ListTile(
-                      title: Text(AppLocalizations.of(context)!.grades),
+                      title: Text(AppLocalizations.of(context)!.gradesPage),
                       onTap: () {
+                        setState(() {
+                          _selectedWidgetIndex = 1;
+                        });
+                        Navigator.pop(context); // Close the drawer
                         // Handle the tap
                       },
                     ),
@@ -65,7 +81,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
 
-        body: Center(
+        body: IndexedStack(
+          index: _selectedWidgetIndex,
+          children: _pages,
         // Your main screen content here
       ),
     );

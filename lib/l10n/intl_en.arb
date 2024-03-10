@@ -8,6 +8,7 @@
   "darkTheme" : "Dark",
   "systemTheme" : "System",
   "language": "Language",
-  "schedule": "Lessons Schedule",
-  "grades": "Grades"
+  "schedulePage": "Lessons Schedule",
+  "gradesPage": "Grades",
+  "groupName": "Group"
 }
