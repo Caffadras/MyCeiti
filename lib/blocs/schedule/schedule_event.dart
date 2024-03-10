@@ -4,7 +4,7 @@ part of 'schedule_bloc.dart';
 abstract class ScheduleEvent {}
 
 class FetchSchedule extends ScheduleEvent{
-  final String studentId;
+  final GroupModel group;
 
-  FetchSchedule({required this.studentId});
+  FetchSchedule({required this.group});
 }

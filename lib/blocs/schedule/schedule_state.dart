@@ -9,9 +9,9 @@ class ScheduleInitial extends ScheduleState {}
 class ScheduleLoading extends ScheduleState {}
 
 class ScheduleLoaded extends ScheduleState {
-  final String response;
+  final Map<String, DaySchedule> schedule;
 
-  ScheduleLoaded({required this.response});
+  ScheduleLoaded({required this.schedule});
 }
 
 class ScheduleError extends ScheduleState {

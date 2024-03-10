@@ -10,5 +10,10 @@
   "language": "Язык",
   "schedulePage": "Расписание Пар",
   "gradesPage": "Оценки",
-  "groupName": "Группа"
+  "groupName": "Группа",
+  "mondayShort": "Пн",
+  "tuesdayShort": "Вт",
+  "wednesdayShort":  "Ср",
+  "thursdayShort": "Чт",
+  "fridayShort":  "Пт"
 }

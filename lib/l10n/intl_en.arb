@@ -10,5 +10,10 @@
   "language": "Language",
   "schedulePage": "Lessons Schedule",
   "gradesPage": "Grades",
-  "groupName": "Group"
+  "groupName": "Group",
+  "mondayShort": "Mo",
+  "tuesdayShort": "Tu",
+  "wednesdayShort":  "We",
+  "thursdayShort": "Th",
+  "fridayShort":  "Fr"
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/pages/home_page.dart';
-import 'package:my_ceiti/providers/LocaleProvider.dart';
+import 'package:my_ceiti/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_manager/theme_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

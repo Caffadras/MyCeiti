@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:theme_manager/theme_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:theme_manager/theme_manager.dart';
 
-import '../../utils/theme_utils.dart';
 
 class AppearanceSettingsPage extends StatelessWidget {
   const AppearanceSettingsPage({super.key});

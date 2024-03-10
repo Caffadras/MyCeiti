@@ -1,8 +1,10 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 import 'package:my_ceiti/models/group_model.dart';
 import 'package:my_ceiti/services/group_service.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GroupSelection extends StatefulWidget {
   final void Function(GroupModel?) onSelect;
@@ -21,17 +23,25 @@ class _GroupSelectionState extends State<GroupSelection> {
     return DropdownSearch<GroupModel>(
       asyncItems: (String filter) => _groupService.fetchGroups(),
       itemAsString: (GroupModel g) => g.name,
-      popupProps: const PopupProps.menu(
+/*      popupProps: const PopupProps.menu(
         searchDelay: Duration.zero,
         showSearchBox: true,
-      ),
+      ),*/
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           labelText: AppLocalizations.of(context)!.groupName,
         ),
       ),
-      onChanged: widget.onSelect,
+      onChanged: _onSelectionChanged,
     );
+  }
+
+  void _onSelectionChanged(GroupModel? groupModel){
+    if (groupModel != null){
+      print("onSelectionChanged: ${groupModel.name}");
+      context.read<ScheduleBloc>().add(FetchSchedule(group: groupModel));
+    }
+    widget.onSelect(groupModel);
   }
 
   /*@override
