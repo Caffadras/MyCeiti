@@ -21,12 +21,23 @@ class _GroupSelectionState extends State<GroupSelection> {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<GroupModel>(
-      asyncItems: (String filter) => _groupService.fetchGroups(),
+      //todo or else from storage
+      asyncItems: fetchGroups,
+
+
       itemAsString: (GroupModel g) => g.name,
-/*      popupProps: const PopupProps.menu(
-        searchDelay: Duration.zero,
-        showSearchBox: true,
-      ),*/
+      popupProps:  PopupProps.menu(
+        errorBuilder: (context, searchEntry, error) {
+          // This widget is shown when an error occurs in fetching dropdown items
+          return ListTile(
+            leading: Icon(Icons.error, color: Colors.red),
+            title: Text(AppLocalizations.of(context)!.groupsNetworkTimeout),
+            subtitle: Text(AppLocalizations.of(context)!.tryAgainLater),
+          );
+        },
+/*        searchDelay: Duration.zero,
+        showSearchBox: true,*/
+      ),
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           labelText: AppLocalizations.of(context)!.groupName,
@@ -34,6 +45,15 @@ class _GroupSelectionState extends State<GroupSelection> {
       ),
       onChanged: _onSelectionChanged,
     );
+  }
+
+  Future<List<GroupModel>> fetchGroups(String filter) async{
+    try {
+      return _groupService.fetchGroups();
+    } on Error catch (_){
+      return [];
+    }
+
   }
 
   void _onSelectionChanged(GroupModel? groupModel){

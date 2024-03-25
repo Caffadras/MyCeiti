@@ -15,5 +15,13 @@
   "tuesdayShort": "Tu",
   "wednesdayShort":  "We",
   "thursdayShort": "Th",
-  "fridayShort":  "Fr"
+  "fridayShort":  "Fr",
+  "scheduleNetworkTimeout": "Could not connect to the server",
+  "scheduleNetworkError": "Something happened while retrieving the schedule",
+  "groupsNetworkTimeout": "Could not connect to the server",
+  "tryAgainLater": "Please try again later",
+  "selectGroupToSeeSchedule": "Please select a group to see its schedule",
+  "aboutApp": "About The App",
+  "enterIDNP": "Enter your IDNP",
+  "fetchGrades": "Fetch Grades"
 }

@@ -30,25 +30,21 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ScheduleBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.schedulePage),
-        ),
-        body: ChangeNotifierProvider(
-          create: (context) => SelectedWeekDayProvider(),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                GroupSelection(
-                  onSelect: _onGroupSelect,
-                ),
-                Expanded(child: ScheduleWidget()),
-                WeekDaySelectionWidget(),
-              ],
-            ),
+      child: ChangeNotifierProvider(
+        create: (context) => SelectedWeekDayProvider(),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(AppLocalizations.of(context)!.schedulePage),
+              GroupSelection(
+                onSelect: _onGroupSelect,
+              ),
+              Expanded(child: ScheduleWidget()),
+              WeekDaySelectionWidget(),
+            ],
           ),
         ),
       ),

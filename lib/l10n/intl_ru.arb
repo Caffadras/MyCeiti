@@ -15,5 +15,13 @@
   "tuesdayShort": "Вт",
   "wednesdayShort":  "Ср",
   "thursdayShort": "Чт",
-  "fridayShort":  "Пт"
+  "fridayShort":  "Пт",
+  "scheduleNetworkTimeout": "Не удалось подключиться к серверу",
+  "scheduleNetworkError": "Что-то произошло при получении расписания",
+  "groupsNetworkTimeout": "Не удалось подключиться к серверу",
+  "tryAgainLater": "Пожалуйста, попытайтесь позже",
+  "selectGroupToSeeSchedule": "Пожалуйста, выберите группу, чтобы увидеть её расписание",
+  "aboutApp": "О приложении",
+  "enterIDNP": "Введите свой IDNP",
+  "fetchGrades": "Узнать Оценки"
 }

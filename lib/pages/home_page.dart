@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/pages/content/grades_page.dart';
 import 'package:my_ceiti/pages/content/shedule_page.dart';
 import 'package:my_ceiti/pages/settings/settings_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'about_app_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -27,13 +29,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
+        onDrawerChanged: (isOpen){FocusManager.instance.primaryFocus?.unfocus();},
         drawer: Drawer(
           child: Column(
             children: [
               Expanded(
-                // This Expanded widget allows the ListView to take up all available space, except for the bottom items.
                 child: ListView(
-                  // Important: Do not use ListView.builder if your list contains a finite number of children.
                   children: <Widget>[
                     SizedBox(
                       height: 100,
@@ -45,36 +46,42 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     ListTile(
+                      trailing: Icon(Icons.access_time_rounded),
                       title: Text(AppLocalizations.of(context)!.schedulePage),
                       onTap: () {
                         setState(() {
                           _selectedWidgetIndex = 0;
                         });
-                        Navigator.pop(context); // Close the drawer
-                        // Handle the tap
+                        Navigator.pop(context);
                       },
                     ),
                     ListTile(
+                      trailing: Icon(Icons.checklist),
                       title: Text(AppLocalizations.of(context)!.gradesPage),
                       onTap: () {
                         setState(() {
                           _selectedWidgetIndex = 1;
                         });
-                        Navigator.pop(context); // Close the drawer
-                        // Handle the tap
+                        Navigator.pop(context);
                       },
                     ),
-                    // Add more items here that you want above the settings
                   ],
                 ),
               ),
-              // This ListTile is aligned at the bottom of the drawer.
               ListTile(
-                leading: Icon(Icons.settings),
+                trailing: Icon(Icons.settings),
                 title: Text(AppLocalizations.of(context)!.settings),
                 onTap: () {
                   Navigator.pop(context); // Close the drawer
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+                },
+              ),
+              ListTile(
+                trailing: const Icon(Icons.info_outline),
+                title: Text(AppLocalizations.of(context)!.aboutApp),
+                onTap: () {
+                  Navigator.pop(context); // Close the drawer
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AboutTheAppPage()));
                 },
               ),
             ],
@@ -84,21 +91,8 @@ class _HomePageState extends State<HomePage> {
         body: IndexedStack(
           index: _selectedWidgetIndex,
           children: _pages,
-        // Your main screen content here
       ),
     );
 
-    /*return Scaffold(
-      body: Column(
-        children: [
-          ElevatedButton(onPressed: (){
-            Provider.of<ThemeManager>(context,listen: false).setTheme(lightTheme);
-          }, child: const Text('Light Theme')),
-          ElevatedButton(onPressed: (){
-            Provider.of<ThemeManager>(context,listen: false).setTheme(darkTheme);
-          }, child: const Text('Dark Theme')),
-        ],
-      ),
-    );*/
   }
 }

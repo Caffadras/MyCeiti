@@ -4,7 +4,7 @@ part of 'grade_bloc.dart';
 abstract class GradeEvent {}
 
 class FetchGrade extends GradeEvent{
-  final String studentId;
+  final String idnp;
 
-  FetchGrade({required this.studentId});
+  FetchGrade({required this.idnp});
 }

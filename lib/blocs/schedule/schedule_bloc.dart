@@ -23,14 +23,16 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     print("_onFetchSchedule");
     emit(ScheduleLoading());
     try{
-      Map<String, DaySchedule> schedule = await _scheduleService.getSchedule(event.group.id);
+      Map<String, DayScheduleModel> schedule = await _scheduleService.getSchedule(event.group.id);
       // final response = await http.get(Uri.parse('https://api.agify.io?name=${event.group.name}'));
 
       //if response.statusCode == 200
 
       emit(ScheduleLoaded(schedule: schedule));
-    } catch (e){
-      emit(ScheduleError(error: e.toString()));
+    } on TimeoutException catch (_){
+      emit(ScheduleTimeout());
+    } catch(_){
+      emit(ScheduleError());
     }
 
     // emit(ScheduleLoading());

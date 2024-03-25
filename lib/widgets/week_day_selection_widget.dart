@@ -25,18 +25,12 @@ class _WeekDaySelectionWidgetState extends State<WeekDaySelectionWidget> {
       AppLocalizations.of(context)!.fridayShort,
     ];
 
-    Color foregroundColor = Theme.of(context).colorScheme.onPrimary; // Text color
-    Color selectedBackgroundColor = Theme.of(context).colorScheme.primary; // Button background color
-    Color backgroundColor = Theme.of(context).colorScheme.secondary; // Selected button background color
-
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(5, (index) {
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: _selectedDayIndex == index ? selectedBackgroundColor : backgroundColor,
-            // foregroundColor: foregroundColor, // This sets the text color
+            backgroundColor: _selectedDayIndex == index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),
             ),
@@ -46,7 +40,7 @@ class _WeekDaySelectionWidgetState extends State<WeekDaySelectionWidget> {
           },
           child: Text(
             localizedDays[index],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),

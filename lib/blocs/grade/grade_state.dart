@@ -8,7 +8,7 @@ class GradeInitial extends GradeState {}
 class GradeLoading extends GradeState {}
 
 class GradeLoaded extends GradeState {
-  final String response;
+  final List<SubjectGrades> response;
 
   GradeLoaded({required this.response});
 }
