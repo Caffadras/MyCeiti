@@ -43,6 +43,7 @@ dependencies:
   html: ^0.15.4
   dropdown_search: ^5.0.6
   flutter_localization: ^0.2.0
+  google_fonts: ^6.2.1
   intl:
 
 dev_dependencies:

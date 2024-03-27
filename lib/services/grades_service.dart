@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:html/dom.dart';
-import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_ceiti/models/example_response.dart';
-import 'package:my_ceiti/models/grades/subject_grades.dart';
+import 'package:my_ceiti/models/grades/semester_model.dart';
 import 'package:my_ceiti/models/group_model.dart';
-import 'package:my_ceiti/utils/html_parser_constants.dart';
+import 'package:my_ceiti/services/parser_service.dart';
 import 'package:my_ceiti/utils/uri_constants.dart';
 
 class GradesService {
+  final ParserService parserService = ParserService();
   List<GroupModel>? _cachedGroups;
 
   Future<void> performLogin(String idnp) async {
@@ -51,30 +50,10 @@ class GradesService {
     }
   }
 
-  Future<List<SubjectGrades>> parseResponse() async {
-    Document document = parse(ExampleResponse.exampleResponse);
-    Element semesterDiv = document.getElementById(ParserConstants.secondSemesterGradesId)!;
-    Element gradesTable = semesterDiv.getElementsByTagName("table")[0];
-    List<Element> gradesRows = gradesTable.getElementsByTagName("tr");
-
-    // gradesTable.
-    print(gradesRows);
-
-    List<SubjectGrades> subjectGradesList = [];
-    for (int i =1; i<gradesRows.length; ++i){
-      Element row = gradesRows[i];
-      print(row.outerHtml);
-      List<Element> columns = row.getElementsByTagName("td");
-      if (columns.isNotEmpty){
-        String subjectName = columns[0].children[0].innerHtml;
-        String subjectGrades = columns[1].children[0].innerHtml;
-
-        subjectGradesList.add(SubjectGrades(subjectName, subjectGrades));
-      }
-    }
-    print(subjectGradesList);
-    return subjectGradesList;
+  Future<SemesterModel> parse() async{
+    return await parserService.parseResponse(ExampleResponse.exampleResponse, false);
   }
+
   
   String parseSetCookieHeader(String setCookieHeader){
     print("actual coockie ${setCookieHeader}");

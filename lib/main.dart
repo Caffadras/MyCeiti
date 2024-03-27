@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_ceiti/pages/home_page.dart';
 import 'package:my_ceiti/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +15,20 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  ThemeData _getTheme(Brightness brightness){
+    if (brightness == Brightness.light){
+      return ThemeData.light(useMaterial3: true).copyWith(
+        textTheme: GoogleFonts.robotoTextTheme()
+      );
+    } else {
+      return ThemeData.dark();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return ThemeManager(
       defaultBrightnessPreference: BrightnessPreference.system,
-      data: (Brightness brightness) =>
-          ThemeData(
-            primarySwatch: Colors.blue,
-            brightness: brightness,
-          ),
+      data: _getTheme,
 /*      themeChangeListener: (ThemeState state) {
         debugPrint('ThemeState: ${state.brightnessPreference}');
       },*/
