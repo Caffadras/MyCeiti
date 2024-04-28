@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -6,67 +5,148 @@ import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 import 'package:my_ceiti/models/group_model.dart';
 import 'package:my_ceiti/services/group_service.dart';
 
-class GroupSelection extends StatefulWidget {
+class GroupSelectionWidget extends StatefulWidget {
   final void Function(GroupModel?) onSelect;
-  const GroupSelection({super.key, required this.onSelect});
+
+  const GroupSelectionWidget({super.key, required this.onSelect});
 
   @override
-  State<GroupSelection> createState() => _GroupSelectionState();
+  State<GroupSelectionWidget> createState() => _GroupSelectionWidgetState();
 }
 
-class _GroupSelectionState extends State<GroupSelection> {
+class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
   final GroupService _groupService = GroupService();
-
+  String? selectedGroup;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownSearch<GroupModel>(
-      //todo or else from storage
-      asyncItems: fetchGroups,
-
-
-      itemAsString: (GroupModel g) => g.name,
-      popupProps:  PopupProps.menu(
-        errorBuilder: (context, searchEntry, error) {
-          // This widget is shown when an error occurs in fetching dropdown items
-          return ListTile(
-            leading: Icon(Icons.error, color: Colors.red),
-            title: Text(AppLocalizations.of(context)!.groupsNetworkTimeout),
-            subtitle: Text(AppLocalizations.of(context)!.tryAgainLater),
-          );
-        },
-/*        searchDelay: Duration.zero,
-        showSearchBox: true,*/
-      ),
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        dropdownSearchDecoration: InputDecoration(
-          labelText: AppLocalizations.of(context)!.groupName,
+    return BlocBuilder<ScheduleBloc, ScheduleState>(builder: (context, state) {
+      ScheduleBloc scheduleBloc = context.read<ScheduleBloc>();
+      return Card(
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        //todo hardcoded
+        color: Colors.grey[100],
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () async {
+            final selectedItemModel = await showDialog<GroupModel>(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: _buildDialogContent(context, scheduleBloc),
+                );
+              },
+            );
+            if (selectedItemModel != null) {
+              setState(() {
+                selectedGroup = selectedItemModel.name;
+              });
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    "Group: ${selectedGroup ?? ""}",
+                    style: TextStyle(
+                      fontSize: 18
+                    ),
+                  )),
+            ],
+          ),
         ),
-      ),
-      onChanged: _onSelectionChanged,
+      );
+      /*Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(
+            onPressed: () async {
+              final selectedItemModel = await showDialog<GroupModel>(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    child: _buildDialogContent(context, scheduleBloc),
+                  );
+                },
+              );
+              if (selectedItemModel != null) {
+                setState(() {
+                  selectedGroup = selectedItemModel.name;
+                });
+              }
+            },
+            child: Text(AppLocalizations.of(context)!.selectGroup),
+          ),
+          Text(selectedGroup ?? "")
+        ],
+      );*/
+    });
+  }
+
+  Widget _buildDialogContent(BuildContext context, ScheduleBloc scheduleBloc) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FutureBuilder(
+            future: fetchGroups(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text(AppLocalizations.of(context)!.groupsNetworkTimeout);
+              } else {
+                return Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Scrollbar(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(snapshot.data![index].name),
+                              onTap: () {
+                                scheduleBloc.add(FetchSchedule(
+                                    group: snapshot.data![index]));
+                                Navigator.pop(context, snapshot.data![index]);
+                              },
+                            );
+                          }),
+                    ),
+                  ),
+                );
+              }
+            }),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.cancel))
+      ],
     );
   }
 
-  Future<List<GroupModel>> fetchGroups(String filter) async{
-    try {
-      return _groupService.fetchGroups();
-    } on Error catch (_){
-      return [];
-    }
+  Future<List<GroupModel>> fetchGroups() async {
+    // try {
+    //   await Future.delayed(Duration(seconds: 2));
 
+    return await _groupService.fetchGroups();
+    // } catch (_) {
+    //   return [];
+    // }
   }
 
-  void _onSelectionChanged(GroupModel? groupModel){
-    if (groupModel != null){
+  void _onSelectionChanged(GroupModel? groupModel) {
+    if (groupModel != null) {
       print("onSelectionChanged: ${groupModel.name}");
       context.read<ScheduleBloc>().add(FetchSchedule(group: groupModel));
     }
     widget.onSelect(groupModel);
   }
 
-  /*@override
+/*@override
   Widget build(BuildContext context) {
-*//*    return FutureBuilder(
+*/ /*    return FutureBuilder(
       future: _groupService.fetchGroups(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting){
@@ -74,7 +154,7 @@ class _GroupSelectionState extends State<GroupSelection> {
         } else if (snapshot.hasError){
           //todo
         }
-        final groups = snapshot.data!;*//*
+        final groups = snapshot.data!;*/ /*
         return DropdownSearch<GroupModel>(
           asyncItems: (String filter) => _groupService.fetchGroups(),
           itemAsString: (GroupModel g) => g.name,
@@ -91,10 +171,10 @@ class _GroupSelectionState extends State<GroupSelection> {
               // hintText: "country in menu mode",
             ),
           ),
-          *//*dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(hintText: "123")),*//*
+          */ /*dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(hintText: "123")),*/ /*
         );
-      *//*},
-    );*//*
+      */ /*},
+    );*/ /*
   }*/
 }

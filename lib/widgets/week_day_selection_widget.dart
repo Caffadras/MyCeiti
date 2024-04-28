@@ -32,7 +32,7 @@ class _WeekDaySelectionWidgetState extends State<WeekDaySelectionWidget> {
           style: ElevatedButton.styleFrom(
             backgroundColor: _selectedDayIndex == index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
           onPressed: () {

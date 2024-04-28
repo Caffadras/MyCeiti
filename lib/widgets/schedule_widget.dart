@@ -74,7 +74,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     DayScheduleModel schedule = state.schedule[dayKey]!;
     return LessonsWidget(
       dayOfTheWeek: dayKey,
-      daySchedule: schedule,
+      scheduleModel: schedule,
     );
 
   }

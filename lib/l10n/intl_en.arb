@@ -21,7 +21,9 @@
   "groupsNetworkTimeout": "Could not connect to the server",
   "tryAgainLater": "Please try again later",
   "selectGroupToSeeSchedule": "Please select a group to see its schedule",
+  "selectGroup": "Select Group",
   "aboutApp": "About The App",
   "enterIDNP": "Enter your IDNP",
-  "fetchGrades": "Fetch Grades"
+  "fetchGrades": "Fetch Grades",
+  "cancel": "Cancel"
 }

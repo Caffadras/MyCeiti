@@ -45,6 +45,8 @@ dependencies:
   flutter_localization: ^0.2.0
   google_fonts: ^6.2.1
   intl:
+  animations:
+  animated_bottom_navigation_bar:
 
 dev_dependencies:
   flutter_test:

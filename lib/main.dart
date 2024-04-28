@@ -36,6 +36,12 @@ class MyApp extends StatelessWidget {
         return ChangeNotifierProvider(
           create: (context) => LocaleProvider(),
           builder: (context, child) {
+            // Set system navigation bar color
+            // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            //   systemNavigationBarColor: theme.themeData.colorScheme.surface, // Navigation bar color
+            //   systemNavigationBarIconBrightness: Brightness.light, // Navigation bar icon brightness
+            // ));
+
             final localeProvider = Provider.of<LocaleProvider>(context);
             return MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -45,7 +51,7 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               theme: theme.themeData,
-              home: HomePage(),
+              home: const HomePage(),
             );
           },
         );

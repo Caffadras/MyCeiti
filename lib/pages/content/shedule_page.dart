@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 import 'package:my_ceiti/models/group_model.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +26,7 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -38,10 +39,8 @@ class _SchedulePageState extends State<SchedulePage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text(AppLocalizations.of(context)!.schedulePage),
-              GroupSelection(
-                onSelect: _onGroupSelect,
-              ),
+             GroupSelectionWidget(onSelect: _onGroupSelect),
+
               Expanded(child: ScheduleWidget()),
               WeekDaySelectionWidget(),
             ],

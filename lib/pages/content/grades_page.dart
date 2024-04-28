@@ -15,7 +15,7 @@ class GradesPage extends StatefulWidget {
 
 class _GradesPageState extends State<GradesPage> {
   final TextEditingController _controller = TextEditingController();
-
+  int _selectedPageIndex = 0;
 
   Future<void> fetchData(BuildContext context) async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -29,53 +29,26 @@ class _GradesPageState extends State<GradesPage> {
       child: BlocBuilder<GradeBloc, GradeState>(
         builder: (context, state) {
           return GestureDetector(
-            onTap: (){
+            onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: DefaultTabController(
               length: 3,
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(AppLocalizations.of(context)!.gradesPage),
-                  bottom: const TabBar(
+              child: Column(
+                children: [
+                  TabBar(
+                    onTap: (int index) {
+                      setState(() {
+                        _selectedPageIndex = index;
+                      });
+                    },
                     tabs: [
-                      Tab(icon: Icon(Icons.directions_car)),
+                      Tab(text: "123"),
                       Tab(icon: Icon(Icons.directions_transit)),
                       Tab(icon: Icon(Icons.directions_bike)),
                     ],
                   ),
-                ),
-                /*bottomNavigationBar: NavigationBar(
-                  destinations: const <Widget>[
-                    NavigationDestination(
-                      selectedIcon: Icon(Icons.home),
-                      icon: Icon(Icons.home_outlined),
-                      label: 'Home',
-                    ),
-                    NavigationDestination(
-                      icon: Badge(child: Icon(Icons.notifications_sharp)),
-                      label: 'Notifications',
-                    ),
-                    NavigationDestination(
-                      icon: Badge(child: Icon(Icons.notifications_sharp)),
-                      label: 'Notifications',
-                    ),
-                    NavigationDestination(
-                      icon: Badge(child: Icon(Icons.notifications_sharp)),
-                      label: 'Notifications',
-                    ),
-                    NavigationDestination(
-                      icon: Badge(
-                        label: Text('2'),
-                        child: Icon(Icons.messenger_sharp),
-                      ),
-                      label: 'Messages',
-                    ),
-                  ],
-                ),*/
-                body: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       TextField(
@@ -84,18 +57,22 @@ class _GradesPageState extends State<GradesPage> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterIDNP),
+                        decoration: InputDecoration(
+                            hintText:
+                                AppLocalizations.of(context)!.enterIDNP),
                       ),
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () => fetchData(context),
-                        child: Text(AppLocalizations.of(context)!.fetchGrades),
+                        child:
+                            Text(AppLocalizations.of(context)!.fetchGrades),
                       ),
                       SizedBox(height: 20),
                       buildText(state),
+                      Text("Page $_selectedPageIndex"),
                     ],
-                  ),
-                ),
+                  )
+                ],
               ),
             ),
           );
@@ -108,7 +85,9 @@ class _GradesPageState extends State<GradesPage> {
     if (state is GradeLoading) {
       return CircularProgressIndicator();
     } else if (state is GradeLoaded) {
-      return GradesTableWidget(semesterModel: state.response,);
+      return GradesTableWidget(
+        semesterModel: state.response,
+      );
     } else if (state is GradeError) {
       return Text('Error: ${state.error}');
     } else {
