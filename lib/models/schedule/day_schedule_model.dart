@@ -1,15 +1,15 @@
-import 'package:my_ceiti/models/schedule_entry_model.dart';
+import 'package:my_ceiti/models/schedule/schedule_entry_model.dart';
 
 class DayScheduleModel {
-  List<ScheduleEntryModel> dayScheduleEntries;
+  List<DayScheduleEntryModel> dayScheduleEntries;
 
   DayScheduleModel({required this.dayScheduleEntries});
 
   factory DayScheduleModel.fromJson(Map<String, dynamic> json) {
-    List<ScheduleEntryModel> entries = [];
+    List<DayScheduleEntryModel> entries = [];
     json.forEach((key, value) {
       if (value is Map<String, dynamic>) {
-        entries.add(ScheduleEntryModel.fromJson(value));
+        entries.add(DayScheduleEntryModel.fromJson(value));
       }
     });
     return DayScheduleModel(dayScheduleEntries: entries);

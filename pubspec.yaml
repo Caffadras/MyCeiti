@@ -44,6 +44,7 @@ dependencies:
   dropdown_search: ^5.0.6
   flutter_localization: ^0.2.0
   google_fonts: ^6.2.1
+  get_it: ^7.7.0
   intl:
   animations:
   animated_bottom_navigation_bar:

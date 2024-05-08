@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_ceiti/blocs/group/group_bloc.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
-import 'package:my_ceiti/models/group_model.dart';
-import 'package:provider/provider.dart';
 
-import '../../providers/selected_week_day_provider.dart';
 import '../../widgets/group_selection_widget.dart';
 import '../../widgets/schedule_widget.dart';
 import '../../widgets/week_day_selection_widget.dart';
@@ -21,38 +19,36 @@ import '../../widgets/week_day_selection_widget.dart';
     },
  */
 class SchedulePage extends StatefulWidget {
+  const SchedulePage({super.key});
+
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ScheduleBloc(),
-      child: ChangeNotifierProvider(
-        create: (context) => SelectedWeekDayProvider(),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-             GroupSelectionWidget(onSelect: _onGroupSelect),
-
-              Expanded(child: ScheduleWidget()),
-              WeekDaySelectionWidget(),
-            ],
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ScheduleBloc(),
+        ),
+        BlocProvider(
+          create: (context) => GroupBloc(),
+        ),
+      ],
+      child: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            GroupSelectionWidget(),
+            Expanded(child: ScheduleWidget()),
+            WeekDaySelectionWidget(),
+          ],
         ),
       ),
     );
-  }
-
-  void _onGroupSelect(GroupModel? model) {
-    print("### CALLBACK GROP SELECTION");
-
-    // var schedule = _scheduleService!.getSchedule();
   }
 }

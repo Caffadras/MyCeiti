@@ -9,7 +9,7 @@ class ScheduleInitial extends ScheduleState {}
 class ScheduleLoading extends ScheduleState {}
 
 class ScheduleLoaded extends ScheduleState {
-  final Map<String, DayScheduleModel> schedule;
+  final WeekScheduleModel schedule;
 
   ScheduleLoaded({required this.schedule});
 }

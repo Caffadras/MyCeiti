@@ -1,24 +1,27 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_ceiti/models/day_schedule_model.dart';
 
-import '../models/lesson_model.dart';
-import '../models/schedule_entry_model.dart';
+import '../models/schedule/day_schedule_model.dart';
+import '../models/schedule/lesson_model.dart';
+import '../models/schedule/schedule_entry_model.dart';
 import 'label_tag_widget.dart';
+import 'lesson_modal_bottom_sheet.dart';
 
 class LessonsWidget extends StatelessWidget {
-  final String? dayOfTheWeek;
+  // final String? dayOfTheWeek;
   final DayScheduleModel? scheduleModel;
 
   const LessonsWidget({
     super.key,
-    this.dayOfTheWeek,
+    // this.dayOfTheWeek,
     this.scheduleModel,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (dayOfTheWeek == null || scheduleModel == null) {
+    if (/*dayOfTheWeek == null || */scheduleModel == null) {
       return _buildEmptyLessonsWidget(context);
     } else {
       return _buildLessonsWidgetForDay2(context);
@@ -51,75 +54,29 @@ class LessonsWidget extends StatelessWidget {
       child: ListView.builder(
           itemCount: scheduleModel!.dayScheduleEntries.length,
           itemBuilder: (context, index) {
-            ScheduleEntryModel lessonAt =
+            DayScheduleEntryModel lessonAt =
                 scheduleModel!.dayScheduleEntries.elementAt(index);
-            return _NEWbuildLessonEntry2(index, lessonAt, context);
+            return _buildCard(index, lessonAt, context);
           }),
     );
-    // }
   }
 
-/*  Widget _buildLessonsWidgetForDay(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(15)),
-        child: ListView.separated(
-          itemCount: scheduleModel!.dayScheduleEntries.length,
-          itemBuilder: (context, index) {
-            ScheduleEntryModel lessonAt =
-                scheduleModel!.dayScheduleEntries.elementAt(index);
-            return _buildLessonEntry2(index, lessonAt);
-          },
-          separatorBuilder: (context, index) => Divider(),
-        ),
-      ),
-    );
-    // }
-  }*/
-  Widget _NEWbuildLessonEntry2(
-      int index, ScheduleEntryModel lesson, BuildContext context) {
+  Widget _buildCard(
+      int index, DayScheduleEntryModel lesson, BuildContext context) {
     return Card(
-
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       //todo hardcoded
       color: Colors.grey[100],
       child: InkWell(
         borderRadius: BorderRadius.circular(15),
         onTap: () {
-          _buildModalBottomSheet(context);
+          _buildModalBottomSheet(context, lesson);
         },
         child: IntrinsicHeight(
           child: Row(children: [
-
             Padding(
-              padding: EdgeInsets.all(7),
-              child: Container(
-                decoration: BoxDecoration(
-                    color:
-                        isEmptyEntry(lesson) ? Colors.grey : Color(0xff6ae792),
-                    borderRadius: BorderRadius.circular(15)),
-                padding: EdgeInsets.symmetric(horizontal: 7),
-                child: Row(
-                  children: [
-                    Text(
-                      '${index + 1}',
-                      style: TextStyle(color: Colors.black, fontSize: 30),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text("8:00"), Text("11:00")],
-                    )
-                  ],
-                ),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+              child: _buildTimeslot(lesson, index),
             ),
             buildLessonContent(lesson),
           ]),
@@ -128,27 +85,45 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _buildModalBottomSheet(BuildContext context) {
+  Widget _buildTimeslot(DayScheduleEntryModel lesson, int index) {
+    return Container(
+              decoration: BoxDecoration(
+                  color:
+                      isEmptyEntry(lesson) ? Colors.grey : Color(0xff6ae792),
+                  borderRadius: BorderRadius.circular(15)),
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                children: [
+                  Text(
+                    '${index + 1}',
+                    style: TextStyle(color: Colors.black, fontSize: 27),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "8:00",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                      Text("11:00",
+                        style: TextStyle(fontSize: 13),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+  }
+
+  Future<dynamic> _buildModalBottomSheet(BuildContext context, DayScheduleEntryModel lesson) {
     return showModalBottomSheet(
       context: context,
+      enableDrag: true,
       builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          color: Colors.amber,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text('Modal BottomSheet'),
-                ElevatedButton(
-                  child: const Text('Close BottomSheet'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
-        );
+        return LessonModalBottomSheet(lesson: lesson);
       },
     );
   }
@@ -175,11 +150,11 @@ class LessonsWidget extends StatelessWidget {
         ));
   }*/
 
-  bool isEmptyEntry(ScheduleEntryModel lesson) {
+  bool isEmptyEntry(DayScheduleEntryModel lesson) {
     return lesson.both.isEmpty && lesson.impar.isEmpty && lesson.par.isEmpty;
   }
 
-  Widget buildLessonContent(ScheduleEntryModel lesson) {
+  Widget buildLessonContent(DayScheduleEntryModel lesson) {
     if (lesson.both.isNotEmpty) {
       if (lesson.both.length == 1) {
         return _buildConstantSchedule(lesson);
@@ -200,32 +175,19 @@ class LessonsWidget extends StatelessWidget {
         Text(
           overflow: TextOverflow.ellipsis,
           lesson.subjectName,
-          style: TextStyle(
-            fontSize: 18
-          ),
+          style: TextStyle(fontSize: 16),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            LabelTag(label: lesson.classroom,),
-            Text(
-                lesson.teacherName),
+            LabelTag(
+              label: _trimClassroomNumber(lesson.classroom),
+            ),
+            Text(lesson.teacherName),
           ],
         ),
       ],
     );
-  }
-
-  String _buildConstantScheduleTextOld(ScheduleEntryModel entry) {
-    LessonModel lesson = entry.both[0];
-    String result =
-        "${lesson.subjectName} | ${lesson.classroom} | ${lesson.teacherName}";
-    if (entry.both.length == 2) {
-      lesson = entry.both[1];
-      result =
-          "$result\n${lesson.subjectName} | ${lesson.classroom} | ${lesson.teacherName}";
-    }
-    return result;
   }
 
   Widget _buildEmptySchedule() {
@@ -241,23 +203,23 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildConstantSchedule(ScheduleEntryModel lesson) {
+  Widget _buildConstantSchedule(DayScheduleEntryModel lesson) {
     return Expanded(
       child: Container(
-        height: 80,
+        height: 70,
         // child: LabelTag(label: "123",),
         child: _buildConstantScheduleText(lesson.both.first),
       ),
     );
   }
 
-  Widget _buildConstantDoubleSchedule(ScheduleEntryModel lesson) {
+  Widget _buildConstantDoubleSchedule(DayScheduleEntryModel lesson) {
     // return SizedBox(
     //   height: 20,
     // );
     return Expanded(
       child: Container(
-        height: 80,
+        height: 70,
         alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -271,7 +233,7 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFloatingSchedule(ScheduleEntryModel lesson) {
+  Widget _buildFloatingSchedule(DayScheduleEntryModel lesson) {
     return Expanded(
       child: Container(
         height: 65,
@@ -308,5 +270,9 @@ class LessonsWidget extends StatelessWidget {
         Text(lesson.teacherName),
       ],
     );
+  }
+
+  String _trimClassroomNumber(String classroom){
+    return classroom.substring(0, min(3, classroom.length));
   }
 }

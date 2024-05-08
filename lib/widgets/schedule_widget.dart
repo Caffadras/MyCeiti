@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_ceiti/blocs/group/group_bloc.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
+import 'package:my_ceiti/main.dart';
 import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/day_schedule_model.dart';
+import '../models/schedule/day_schedule_model.dart';
+import '../services/schedule_service.dart';
 import 'lessons_widget.dart';
 
 class ScheduleWidget extends StatefulWidget {
@@ -15,26 +18,37 @@ class ScheduleWidget extends StatefulWidget {
   State<ScheduleWidget> createState() => _ScheduleWidgetState();
 }
 
-class _ScheduleWidgetState extends State<ScheduleWidget> {
+class _ScheduleWidgetState extends State<ScheduleWidget>
+    with AutomaticKeepAliveClientMixin {
+  final ScheduleService _scheduleService = getIt<ScheduleService>();
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     int selectedDay = Provider.of<SelectedWeekDayProvider>(context).selectedDay;
-    return BlocBuilder<ScheduleBloc, ScheduleState>(
-      builder: (BuildContext context, state) {
-        if (state is ScheduleInitial) {
-          return _buildInitialScheduleWidget();
-        } else if (state is ScheduleLoading) {
-          return _buildLoadingIndicator();
-        } else if (state is ScheduleLoaded) {
-          return _buildActualSchedule(state, selectedDay);
-        } else if (state is ScheduleTimeout) {
-          return Text(AppLocalizations.of(context)!.scheduleNetworkTimeout);
-        } else if (state is ScheduleError) {
-          return Text(AppLocalizations.of(context)!.scheduleNetworkError);
-        } else {
-          return Text(selectedDay.toString());
+    return BlocListener<GroupBloc, GroupState>(
+      listener: (context, state){
+        if (state is GroupSelectedState) {
+          context.read<ScheduleBloc>().add(FetchSchedule(group: state.selectedGroup));
         }
       },
+      child: BlocBuilder<ScheduleBloc, ScheduleState>(
+        builder: (BuildContext context, state) {
+          if (state is ScheduleInitial) {
+            return _buildInitialScheduleWidget();
+          } else if (state is ScheduleLoading) {
+            return _buildLoadingIndicator();
+          } else if (state is ScheduleLoaded) {
+            return _buildActualSchedule(state, selectedDay);
+          } else if (state is ScheduleTimeout) {
+            return Text(AppLocalizations.of(context)!.scheduleNetworkTimeout);
+          } else if (state is ScheduleError) {
+            return Text(AppLocalizations.of(context)!.scheduleNetworkError);
+          } else {
+            return Text(AppLocalizations.of(context)!.errorOccurred);
+          }
+        },
+      ),
     );
   }
 
@@ -49,35 +63,23 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   Widget _buildInitialScheduleWidget() {
-    /* return Center(
-      child: SizedBox(
-        height: 100,
-        width: 100,
-        child: Container(
-            decoration: BoxDecoration(color: Colors.cyan),
-            child: CircularProgressIndicator()),
-      ),
-    );*/
-/*    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(color: Colors.amber),
-        child: Text("Please, select group"),
-      ),
-    );*/
-
-    return LessonsWidget();
+    // if (_scheduleService.selectedSchedule != null) {
+    //   return LessonsWidget(
+    //     scheduleModel: _scheduleService.selectedSchedule!.weekScheduleMap[selectedDay],
+    //   );
+    // } else {
+      return const LessonsWidget();
+    // }
   }
 
   Widget _buildActualSchedule(ScheduleLoaded state, int selectedDay) {
     // if (selectedDay < state.schedule.keys.length) {
-    String dayKey = state.schedule.keys.elementAt(selectedDay);
-    DayScheduleModel schedule = state.schedule[dayKey]!;
+    DayScheduleModel schedule = state.schedule.weekScheduleMap[selectedDay]!;
     return LessonsWidget(
-      dayOfTheWeek: dayKey,
       scheduleModel: schedule,
     );
-
   }
 
-
+  @override
+  bool get wantKeepAlive => true;
 }

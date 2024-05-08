@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_ceiti/pages/home_page.dart';
 import 'package:my_ceiti/providers/locale_provider.dart';
+import 'package:my_ceiti/services/group_service.dart';
+import 'package:my_ceiti/services/schedule_service.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_manager/theme_manager.dart';
 
+final getIt = GetIt.instance;
+
+void setup(){
+  getIt.registerSingleton<ScheduleService>(ScheduleService());
+  getIt.registerSingleton<GroupService>(GroupService());
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(MyApp());
+  setup();
+  runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

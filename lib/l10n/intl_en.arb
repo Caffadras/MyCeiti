@@ -16,6 +16,7 @@
   "wednesdayShort":  "We",
   "thursdayShort": "Th",
   "fridayShort":  "Fr",
+  "errorOccurred": "Unexpected error has occurred. Please, try again later",
   "scheduleNetworkTimeout": "Could not connect to the server",
   "scheduleNetworkError": "Something happened while retrieving the schedule",
   "groupsNetworkTimeout": "Could not connect to the server",

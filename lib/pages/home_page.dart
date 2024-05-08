@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/pages/content/grades_page.dart';
 import 'package:my_ceiti/pages/content/shedule_page.dart';
 import 'package:my_ceiti/pages/settings/settings_page.dart';
+import 'package:my_ceiti/providers/selected_week_day_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'about_app_page.dart';
 
@@ -17,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedPageIndex = 0;
 
-  final List<Widget> _pages = [SchedulePage(), GradesPage()];
+  final List<Widget> _pages = [const SchedulePage(), const GradesPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +110,14 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: PageTransitionSwitcher(
-        duration: const Duration(milliseconds: 300),
-        reverse: _selectedPageIndex == 0,
-        transitionBuilder: _sharedAxisTransition,
-        child: _pages[_selectedPageIndex],
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => SelectedWeekDayProvider(),
+        child: PageTransitionSwitcher(
+          duration: const Duration(milliseconds: 300),
+          reverse: _selectedPageIndex == 0,
+          transitionBuilder: _sharedAxisTransition,
+          child: _pages[_selectedPageIndex],
+        ),
       ),
     );
   }
