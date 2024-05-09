@@ -50,13 +50,18 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       WeekScheduleModel schedule = await _scheduleService.getSchedule(event.group.id);
       // final response = await http.get(Uri.parse('https://api.agify.io?name=${event.group.name}'));
 
+      //todo
       //if response.statusCode == 200
 
       emit(ScheduleLoaded(schedule: schedule));
       _persistSchedule(schedule);
-    } on TimeoutException catch (_){
+    } on TimeoutException catch (e){
+      //todo clear from prefs invalid cache?
+      print(e.toString());
       emit(ScheduleTimeout());
-    } catch(_){
+    } catch(e){
+      //todo clear from prefs invalid cache?
+      print(e.toString());
       emit(ScheduleError());
     }
 

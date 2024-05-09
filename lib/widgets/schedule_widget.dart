@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/blocs/group/group_bloc.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 import 'package:my_ceiti/main.dart';
+import 'package:my_ceiti/models/schedule/lesson_break_model.dart';
 import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -73,10 +74,11 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
   }
 
   Widget _buildActualSchedule(ScheduleLoaded state, int selectedDay) {
-    // if (selectedDay < state.schedule.keys.length) {
     DayScheduleModel schedule = state.schedule.weekScheduleMap[selectedDay]!;
+    List<LessonBreakModel> breaksModel = state.schedule.lessonBreakModels;
     return LessonsWidget(
       scheduleModel: schedule,
+      breaksModel: breaksModel,
     );
   }
 

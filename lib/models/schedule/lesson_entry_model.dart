@@ -1,17 +1,17 @@
-import 'lesson_model.dart';
+import 'lesson_info.dart';
 
-class DayScheduleEntryModel {
-  List<LessonModel> par;
-  List<LessonModel> impar;
-  List<LessonModel> both;
+class LessonEntryModel {
+  List<LessonInfoModel> par;
+  List<LessonInfoModel> impar;
+  List<LessonInfoModel> both;
 
-  DayScheduleEntryModel({required this.par, required this.impar, required this.both});
+  LessonEntryModel({required this.par, required this.impar, required this.both});
 
-  factory DayScheduleEntryModel.fromJson(Map<String, dynamic> json) {
-    return DayScheduleEntryModel(
-      par: (json['par'] as List).map((i) => LessonModel.fromJson(i)).toList(),
-      impar: (json['impar'] as List).map((i) => LessonModel.fromJson(i)).toList(),
-      both: (json['both'] as List).map((i) => LessonModel.fromJson(i)).toList(),
+  factory LessonEntryModel.fromJson(Map<String, dynamic> json) {
+    return LessonEntryModel(
+      par: (json['par'] as List).map((i) => LessonInfoModel.fromJson(i)).toList(),
+      impar: (json['impar'] as List).map((i) => LessonInfoModel.fromJson(i)).toList(),
+      both: (json['both'] as List).map((i) => LessonInfoModel.fromJson(i)).toList(),
     );
   }
 

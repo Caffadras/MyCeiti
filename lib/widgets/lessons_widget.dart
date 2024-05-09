@@ -2,26 +2,28 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_ceiti/models/schedule/lesson_break_model.dart';
+import 'package:my_ceiti/utils/lesson_breaks_utils.dart';
 
 import '../models/schedule/day_schedule_model.dart';
-import '../models/schedule/lesson_model.dart';
-import '../models/schedule/schedule_entry_model.dart';
+import '../models/schedule/lesson_entry_model.dart';
+import '../models/schedule/lesson_info.dart';
 import 'label_tag_widget.dart';
 import 'lesson_modal_bottom_sheet.dart';
 
 class LessonsWidget extends StatelessWidget {
-  // final String? dayOfTheWeek;
   final DayScheduleModel? scheduleModel;
+  final List<LessonBreakModel>? breaksModel;
 
   const LessonsWidget({
     super.key,
-    // this.dayOfTheWeek,
     this.scheduleModel,
+    this.breaksModel,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (/*dayOfTheWeek == null || */scheduleModel == null) {
+    if (scheduleModel == null) {
       return _buildEmptyLessonsWidget(context);
     } else {
       return _buildLessonsWidgetForDay2(context);
@@ -52,73 +54,116 @@ class LessonsWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
       child: ListView.builder(
-          itemCount: scheduleModel!.dayScheduleEntries.length,
+          itemCount: scheduleModel!.lessonEntries.length,
           itemBuilder: (context, index) {
-            DayScheduleEntryModel lessonAt =
-                scheduleModel!.dayScheduleEntries.elementAt(index);
+            LessonEntryModel lessonAt =
+                scheduleModel!.lessonEntries.elementAt(index);
             return _buildCard(index, lessonAt, context);
           }),
     );
   }
 
   Widget _buildCard(
-      int index, DayScheduleEntryModel lesson, BuildContext context) {
+      int index, LessonEntryModel lesson, BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       //todo hardcoded
       color: Colors.grey[100],
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: () {
-          _buildModalBottomSheet(context, lesson);
-        },
-        child: IntrinsicHeight(
-          child: Row(children: [
+      child: _buildCardWithInkWell(lesson, context, index),
+    );
+  }
+
+  Widget _buildCardWithInkWell(LessonEntryModel lesson, BuildContext context, int index) {
+    void Function()? onTapFunction;
+    if (!isEmptyLessonEntry(lesson)) {
+      onTapFunction = () => _buildModalBottomSheet(context, lesson);
+    }
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(15),
+      onTap: onTapFunction,
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
               child: _buildTimeslot(lesson, index),
             ),
             buildLessonContent(lesson),
-          ]),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildTimeslot(DayScheduleEntryModel lesson, int index) {
+
+  Widget _buildTimeslot(LessonEntryModel lesson, int index) {
+    bool isLessonEmpty = isEmptyLessonEntry(lesson);
     return Container(
-              decoration: BoxDecoration(
-                  color:
-                      isEmptyEntry(lesson) ? Colors.grey : Color(0xff6ae792),
-                  borderRadius: BorderRadius.circular(15)),
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                children: [
-                  Text(
-                    '${index + 1}',
-                    style: TextStyle(color: Colors.black, fontSize: 27),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "8:00",
-                        style: TextStyle(fontSize: 13),
-                      ),
-                      Text("11:00",
-                        style: TextStyle(fontSize: 13),
-                      )
-                    ],
-                  )
-                ],
+      width: 67,
+      decoration: BoxDecoration(
+        color: isLessonEmpty ? Colors.grey.shade300 : Color(0xff6ae792),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 5),
+      child: Opacity(
+        opacity: isLessonEmpty ? 0.5 : 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              '${index + 1}',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 27,
+                fontWeight: isLessonEmpty ? FontWeight.w300 : FontWeight.normal,
               ),
-            );
+            ),
+            SizedBox(width: 5),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _getBreakStartTime(index),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  _getBreakEndTime(index),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Future<dynamic> _buildModalBottomSheet(BuildContext context, DayScheduleEntryModel lesson) {
+
+  String _getBreakStartTime(int lessonIdx) {
+    if (breaksModel != null && lessonIdx < breaksModel!.length){
+      return breaksModel![lessonIdx].start;
+    } else {
+      return LessonBreaksUtil.getDefaultStartTime(lessonIdx);
+    }
+  }
+
+  String _getBreakEndTime(int lessonIdx) {
+    if (breaksModel != null && lessonIdx < breaksModel!.length){
+      return breaksModel![lessonIdx].end;
+    } else {
+      return LessonBreaksUtil.getDefaultEndTime(lessonIdx);
+    }
+  }
+
+
+  Future<dynamic> _buildModalBottomSheet(BuildContext context, LessonEntryModel lesson) {
     return showModalBottomSheet(
       context: context,
       enableDrag: true,
@@ -150,11 +195,11 @@ class LessonsWidget extends StatelessWidget {
         ));
   }*/
 
-  bool isEmptyEntry(DayScheduleEntryModel lesson) {
+  bool isEmptyLessonEntry(LessonEntryModel lesson) {
     return lesson.both.isEmpty && lesson.impar.isEmpty && lesson.par.isEmpty;
   }
 
-  Widget buildLessonContent(DayScheduleEntryModel lesson) {
+  Widget buildLessonContent(LessonEntryModel lesson) {
     if (lesson.both.isNotEmpty) {
       if (lesson.both.length == 1) {
         return _buildConstantSchedule(lesson);
@@ -168,7 +213,7 @@ class LessonsWidget extends StatelessWidget {
     }
   }
 
-  Widget _buildConstantScheduleText(LessonModel lesson) {
+  Widget _buildConstantScheduleText(LessonInfoModel lesson) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -203,7 +248,7 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildConstantSchedule(DayScheduleEntryModel lesson) {
+  Widget _buildConstantSchedule(LessonEntryModel lesson) {
     return Expanded(
       child: Container(
         height: 70,
@@ -213,7 +258,7 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildConstantDoubleSchedule(DayScheduleEntryModel lesson) {
+  Widget _buildConstantDoubleSchedule(LessonEntryModel lesson) {
     // return SizedBox(
     //   height: 20,
     // );
@@ -233,7 +278,7 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFloatingSchedule(DayScheduleEntryModel lesson) {
+  Widget _buildFloatingSchedule(LessonEntryModel lesson) {
     return Expanded(
       child: Container(
         height: 65,
@@ -250,11 +295,11 @@ class LessonsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFloatingScheduleText(List<LessonModel> lessons, bool isOdd) {
+  Widget _buildFloatingScheduleText(List<LessonInfoModel> lessons, bool isOdd) {
     if (lessons.isEmpty) {
       return const Text("-");
     }
-    LessonModel lesson = lessons[0];
+    LessonInfoModel lesson = lessons[0];
     return Column(
       children: [
         Row(

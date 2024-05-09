@@ -1,22 +1,23 @@
-import 'package:my_ceiti/models/schedule/schedule_entry_model.dart';
+import 'package:my_ceiti/models/schedule/lesson_entry_model.dart';
 
 class DayScheduleModel {
-  List<DayScheduleEntryModel> dayScheduleEntries;
+  List<LessonEntryModel> lessonEntries;
 
-  DayScheduleModel({required this.dayScheduleEntries});
+  DayScheduleModel({required this.lessonEntries});
 
   factory DayScheduleModel.fromJson(Map<String, dynamic> json) {
-    List<DayScheduleEntryModel> entries = [];
+    List<LessonEntryModel> entries = [];
     json.forEach((key, value) {
-      if (value is Map<String, dynamic>) {
-        entries.add(DayScheduleEntryModel.fromJson(value));
+      //todo check if there should not be more than 5 lessons
+      if (value is Map<String, dynamic> && int.parse(key) < 6) {
+        entries.add(LessonEntryModel.fromJson(value));
       }
     });
-    return DayScheduleModel(dayScheduleEntries: entries);
+    return DayScheduleModel(lessonEntries: entries);
   }
 
   @override
   String toString() {
-    return 'DaySchedule{dayScheduleEntries: $dayScheduleEntries}';
+    return 'DaySchedule{dayScheduleEntries: $lessonEntries}';
   }
 }

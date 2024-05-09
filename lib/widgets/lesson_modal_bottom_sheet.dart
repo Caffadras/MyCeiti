@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/schedule/schedule_entry_model.dart';
+import '../models/schedule/lesson_entry_model.dart';
 
 class LessonModalBottomSheet extends StatelessWidget {
-  final DayScheduleEntryModel lesson;
+  final LessonEntryModel lesson;
 
   const LessonModalBottomSheet({super.key, required this.lesson});
 

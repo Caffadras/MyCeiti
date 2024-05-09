@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AboutTheAppPage extends StatelessWidget {
   const AboutTheAppPage({super.key});
@@ -14,7 +15,23 @@ class AboutTheAppPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Center(child: Text('My CEITI V1.0')),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(child: Text('My CEITI V1.0')),
+          Center(child: ElevatedButton(
+            onPressed: _clearPrefs,
+            child:
+            Text('Clear Prefs'),
+          ),),
+        ],
+      ),
     );
+  }
+
+  Future<void> _clearPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    print("cleared prefs");
   }
 }

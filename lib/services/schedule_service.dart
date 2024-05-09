@@ -20,7 +20,7 @@ class ScheduleService {
         .get(Uri.parse(UriConstants.getScheduleUri(groupId)))
         .timeout(const Duration(seconds: 2));
 
-    final data = jsonDecode(response.body)['data'];
+    final data = jsonDecode(response.body);
 
     WeekScheduleModel weekSchedule = WeekScheduleModel.fromJson(data);
 

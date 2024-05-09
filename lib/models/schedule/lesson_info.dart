@@ -1,4 +1,4 @@
-class LessonModel {
+class LessonInfoModel {
   String id;
   String subjectName;
   String teacherName;
@@ -8,7 +8,7 @@ class LessonModel {
   String weeks;
   String days;
 
-  LessonModel({
+  LessonInfoModel({
     required this.id,
     required this.subjectName,
     required this.teacherName,
@@ -19,8 +19,8 @@ class LessonModel {
     required this.days,
   });
 
-  factory LessonModel.fromJson(Map<String, dynamic> json) {
-    return LessonModel(
+  factory LessonInfoModel.fromJson(Map<String, dynamic> json) {
+    return LessonInfoModel(
       id: json['_id'],
       subjectName: json['subjectid']['name'],
       teacherName: json['teacherids']['name'],
