@@ -7,14 +7,14 @@ class LessonBreaksUtil {
     {'start': '15:00', 'end': '16:30'}
   ];
 
-  static String getDefaultStartTime(int lessonIdx) {
+  static String getLessonDefaultStartTime(int lessonIdx) {
     if (lessonIdx >= 0 && lessonIdx < defaultPeriods.length) {
       return defaultPeriods[lessonIdx]['start'] ?? "00:00";
     }
     return "00:00";
   }
 
-  static String getDefaultEndTime(int lessonIdx) {
+  static String getLessonDefaultEndTime(int lessonIdx) {
     if (lessonIdx >= 0 && lessonIdx < defaultPeriods.length) {
       return defaultPeriods[lessonIdx]['end'] ?? "00:00";
     }

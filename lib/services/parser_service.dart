@@ -20,13 +20,13 @@ class ParserService {
     // gradesTable.
     print(gradesRows);
 
-    List<SubjectGrades> subjectGradesList = parseSubjectGrades(gradesRows);
-    AbsencesModel absencesModel = parseAbsences(gradesRows);
+    List<SubjectGrades> subjectGradesList = _parseSubjectGrades(gradesRows);
+    AbsencesModel absencesModel = _parseAbsences(gradesRows);
 
     return SemesterModel(subjectGradesList, absencesModel);
   }
 
-  AbsencesModel parseAbsences(List<Element> rows) {
+  AbsencesModel _parseAbsences(List<Element> rows) {
     int startingIdx = rows.length - 4;
     print(rows[startingIdx].innerHtml);
     int total = int.parse(rows[startingIdx].getElementsByTagName("th")[1].innerHtml);
@@ -39,19 +39,37 @@ class ParserService {
     return absencesModel;
   }
 
-  List<SubjectGrades> parseSubjectGrades(List<Element> gradesRows) {
+  List<SubjectGrades> _parseSubjectGrades(List<Element> gradesRows) {
     List<SubjectGrades> subjectGradesList = [];
     for (int i =1; i<gradesRows.length - 4; ++i){
       Element row = gradesRows[i];
       print(row.outerHtml);
       List<Element> columns = row.getElementsByTagName("td");
       String subjectName = columns[0].children[0].innerHtml;
-      String subjectGrades = columns[1].children[0].innerHtml;
-
-      subjectGradesList.add(SubjectGrades(subjectName, subjectGrades));
+      String subjectGradesAndAbsences = columns[1].children[0].innerHtml;
+      List<int> subjectGrades = _extractGrades(subjectGradesAndAbsences);
+      List<String> subjectAbsences = _extractAbsences(subjectGradesAndAbsences);
+      subjectGradesList.add(SubjectGrades(subjectName, subjectGradesAndAbsences, subjectGrades, subjectAbsences));
     }
     print(subjectGradesList);
     return subjectGradesList;
+  }
+
+  List<int> _extractGrades(String gradesAndAbsences) {
+    return gradesAndAbsences
+        .split(',')
+        .map((e) => int.tryParse(e.trim()))
+        .where((grade) => grade != null)
+        .cast<int>()
+        .toList();
+  }
+
+  List<String> _extractAbsences(String gradesAndAbsences) {
+    return gradesAndAbsences
+        .split(',')
+        .map((e) => e.trim())
+        .where((value) => int.tryParse(value) == null && value.isNotEmpty)
+        .toList();
   }
 
 }

@@ -38,7 +38,7 @@ class _SchedulePageState extends State<SchedulePage> {
         ),
       ],
       child: const Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(10.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,

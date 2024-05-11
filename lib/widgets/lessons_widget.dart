@@ -12,6 +12,8 @@ import 'label_tag_widget.dart';
 import 'lesson_modal_bottom_sheet.dart';
 
 class LessonsWidget extends StatelessWidget {
+  static const double _listTileHeight = 80;
+
   final DayScheduleModel? scheduleModel;
   final List<LessonBreakModel>? breaksModel;
 
@@ -58,7 +60,10 @@ class LessonsWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             LessonEntryModel lessonAt =
                 scheduleModel!.lessonEntries.elementAt(index);
-            return _buildCard(index, lessonAt, context);
+            return Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: _buildCard(index, lessonAt, context),
+            );
           }),
     );
   }
@@ -66,9 +71,11 @@ class LessonsWidget extends StatelessWidget {
   Widget _buildCard(
       int index, LessonEntryModel lesson, BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      //todo hardcoded
-      color: Colors.grey[100],
+      // clipBehavior: Clip.antiAlias,
+      elevation: isEmptyLessonEntry(lesson) ? 1 : 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: _buildCardWithInkWell(lesson, context, index),
     );
   }
@@ -87,7 +94,7 @@ class LessonsWidget extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
-              child: _buildTimeslot(lesson, index),
+              child: _buildTimeslot(lesson, index, context),
             ),
             buildLessonContent(lesson),
           ],
@@ -97,12 +104,12 @@ class LessonsWidget extends StatelessWidget {
   }
 
 
-  Widget _buildTimeslot(LessonEntryModel lesson, int index) {
+  Widget _buildTimeslot(LessonEntryModel lesson, int index, BuildContext context) {
     bool isLessonEmpty = isEmptyLessonEntry(lesson);
     return Container(
       width: 67,
       decoration: BoxDecoration(
-        color: isLessonEmpty ? Colors.grey.shade300 : Color(0xff6ae792),
+        color: isLessonEmpty ? Colors.grey.shade200 : Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(15),
       ),
       padding: EdgeInsets.symmetric(horizontal: 5),
@@ -124,14 +131,14 @@ class LessonsWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _getBreakStartTime(index),
+                  _getLessonStartTime(index),
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
                   ),
                 ),
                 Text(
-                  _getBreakEndTime(index),
+                  _getLessonEndTime(index),
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.black,
@@ -146,19 +153,19 @@ class LessonsWidget extends StatelessWidget {
   }
 
 
-  String _getBreakStartTime(int lessonIdx) {
+  String _getLessonStartTime(int lessonIdx) {
     if (breaksModel != null && lessonIdx < breaksModel!.length){
       return breaksModel![lessonIdx].start;
     } else {
-      return LessonBreaksUtil.getDefaultStartTime(lessonIdx);
+      return LessonBreaksUtil.getLessonDefaultStartTime(lessonIdx);
     }
   }
 
-  String _getBreakEndTime(int lessonIdx) {
+  String _getLessonEndTime(int lessonIdx) {
     if (breaksModel != null && lessonIdx < breaksModel!.length){
       return breaksModel![lessonIdx].end;
     } else {
-      return LessonBreaksUtil.getDefaultEndTime(lessonIdx);
+      return LessonBreaksUtil.getLessonDefaultEndTime(lessonIdx);
     }
   }
 
@@ -172,28 +179,6 @@ class LessonsWidget extends StatelessWidget {
       },
     );
   }
-
-/*  Container _buildLessonEntry2(int index, ScheduleEntryModel lesson) {
-    return Container(
-        padding: const EdgeInsets.all(1.0),
-        child: IntrinsicHeight(
-          child: Row(children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 7),
-              // decoration: BoxDecoration(color: Colors.yellow),
-              child: CircleAvatar(
-                backgroundColor:
-                    isEmptyEntry(lesson) ? Colors.grey : Color(0xff6ae792),
-                child: Text(
-                  '$index',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-            buildLessonContent(lesson),
-          ]),
-        ));
-  }*/
 
   bool isEmptyLessonEntry(LessonEntryModel lesson) {
     return lesson.both.isEmpty && lesson.impar.isEmpty && lesson.par.isEmpty;
@@ -238,20 +223,14 @@ class LessonsWidget extends StatelessWidget {
   Widget _buildEmptySchedule() {
     return Expanded(
       child: Container(
-          height: 65,
-          alignment: Alignment.centerLeft,
-          // decoration: BoxDecoration(color: Colors.yellow),
-          child: Text(
-            "-",
-            textAlign: TextAlign.center,
-          )),
-    );
+          height: _listTileHeight,
+    ));
   }
 
   Widget _buildConstantSchedule(LessonEntryModel lesson) {
     return Expanded(
       child: Container(
-        height: 70,
+        height: _listTileHeight,
         // child: LabelTag(label: "123",),
         child: _buildConstantScheduleText(lesson.both.first),
       ),
@@ -264,7 +243,7 @@ class LessonsWidget extends StatelessWidget {
     // );
     return Expanded(
       child: Container(
-        height: 70,
+        height: _listTileHeight,
         alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -281,7 +260,7 @@ class LessonsWidget extends StatelessWidget {
   Widget _buildFloatingSchedule(LessonEntryModel lesson) {
     return Expanded(
       child: Container(
-        height: 65,
+        height: _listTileHeight,
         alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

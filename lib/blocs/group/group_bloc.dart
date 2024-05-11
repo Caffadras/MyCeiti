@@ -22,8 +22,8 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     add(LoadPersistedGroup());
   }
 
-  void _onLoadPersistedGroup( LoadPersistedGroup event, Emitter<GroupState> emit) {
-    SharedPreferences.getInstance()
+  Future<void> _onLoadPersistedGroup( LoadPersistedGroup event, Emitter<GroupState> emit) async {
+    await SharedPreferences.getInstance()
         .then((prefs) => prefs.getString(_persistedGroupKey))
         .then((persistedGroup) => _parseGroupAndEmit(persistedGroup, emit));
   }

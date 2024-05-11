@@ -29,53 +29,33 @@ class _GradesPageState extends State<GradesPage> {
       child: BlocBuilder<GradeBloc, GradeState>(
         builder: (context, state) {
           return GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: DefaultTabController(
-              length: 3,
-              child: Column(
-                children: [
-                  TabBar(
-                    onTap: (int index) {
-                      setState(() {
-                        _selectedPageIndex = index;
-                      });
-                    },
-                    tabs: [
-                      Tab(text: "123"),
-                      Tab(icon: Icon(Icons.directions_transit)),
-                      Tab(icon: Icon(Icons.directions_bike)),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      TextField(
-                        controller: _controller,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context)!.enterIDNP),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => fetchData(context),
-                        child:
-                            Text(AppLocalizations.of(context)!.fetchGrades),
-                      ),
-                      SizedBox(height: 20),
-                      buildText(state),
-                      Text("Page $_selectedPageIndex"),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextField(
+                      controller: _controller,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.enterIDNP),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => fetchData(context),
+                      child: Text(AppLocalizations.of(context)!.fetchGrades),
+                    ),
+                    SizedBox(height: 20),
+                    buildText(state),
+                    Text("Page $_selectedPageIndex"),
+                  ],
+                ),
+              ));
         },
       ),
     );

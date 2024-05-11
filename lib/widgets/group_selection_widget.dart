@@ -27,10 +27,10 @@ class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
         }
         return Card(
           margin: EdgeInsets.symmetric(horizontal: 4),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          //todo hardcoded
-          color: Colors.grey[100],
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
             onTap: () async {
@@ -61,30 +61,6 @@ class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
             ),
           ),
         );
-        /*Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              final selectedItemModel = await showDialog<GroupModel>(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    child: _buildDialogContent(context, scheduleBloc),
-                  );
-                },
-              );
-              if (selectedItemModel != null) {
-                setState(() {
-                  selectedGroup = selectedItemModel.name;
-                });
-              }
-            },
-            child: Text(AppLocalizations.of(context)!.selectGroup),
-          ),
-          Text(selectedGroup ?? "")
-        ],
-      );*/
       },
     );
   }

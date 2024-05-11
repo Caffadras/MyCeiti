@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/selected_week_day_provider.dart';
 
+enum WeekDays { monday, tuesday, wednesday, thursday, friday }
+
 class WeekDaySelectionWidget extends StatefulWidget {
   const WeekDaySelectionWidget({super.key});
 
@@ -12,40 +14,42 @@ class WeekDaySelectionWidget extends StatefulWidget {
 }
 
 class _WeekDaySelectionWidgetState extends State<WeekDaySelectionWidget> {
-  int _selectedDayIndex = 0;
+  WeekDays selectedDay = WeekDays.monday;
 
   @override
   Widget build(BuildContext context) {
-    _selectedDayIndex = Provider.of<SelectedWeekDayProvider>(context).selectedDay;
-    List<String> localizedDays = [
-      AppLocalizations.of(context)!.mondayShort,
-      AppLocalizations.of(context)!.tuesdayShort,
-      AppLocalizations.of(context)!.wednesdayShort,
-      AppLocalizations.of(context)!.thursdayShort,
-      AppLocalizations.of(context)!.fridayShort,
-    ];
+    final provider = Provider.of<SelectedWeekDayProvider>(context);
+    selectedDay = WeekDays.values[provider.selectedDay];
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(5, (index) {
-        return ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: _selectedDayIndex == index ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          onPressed: () {
-            Provider.of<SelectedWeekDayProvider>(context, listen: false).updateSelectedDay(index);
-          },
-          child: Text(
-            localizedDays[index],
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        );
-      }),
+    return SegmentedButton<WeekDays>(
+      style: ButtonStyle(
+        visualDensity: VisualDensity(horizontal: 3),
+      ),
+      showSelectedIcon: false,
+      segments: <ButtonSegment<WeekDays>>[
+        ButtonSegment<WeekDays>(
+            value: WeekDays.monday,
+            label: Text(AppLocalizations.of(context)!.mondayShort)),
+        ButtonSegment<WeekDays>(
+            value: WeekDays.tuesday,
+            label: Text(AppLocalizations.of(context)!.tuesdayShort)),
+        ButtonSegment<WeekDays>(
+            value: WeekDays.wednesday,
+            label: Text(AppLocalizations.of(context)!.wednesdayShort)),
+        ButtonSegment<WeekDays>(
+            value: WeekDays.thursday,
+            label: Text(AppLocalizations.of(context)!.thursdayShort)),
+        ButtonSegment<WeekDays>(
+            value: WeekDays.friday,
+            label: Text(AppLocalizations.of(context)!.fridayShort)),
+      ],
+      selected: <WeekDays>{selectedDay},
+      onSelectionChanged: (Set<WeekDays> newSelection) {
+        setState(() {
+          selectedDay = newSelection.first;
+          provider.updateSelectedDay(WeekDays.values.indexOf(newSelection.first));
+        });
+      },
     );
   }
 }
