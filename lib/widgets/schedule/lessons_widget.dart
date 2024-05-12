@@ -5,14 +5,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/models/schedule/lesson_break_model.dart';
 import 'package:my_ceiti/utils/lesson_breaks_utils.dart';
 
-import '../models/schedule/day_schedule_model.dart';
-import '../models/schedule/lesson_entry_model.dart';
-import '../models/schedule/lesson_info.dart';
-import 'label_tag_widget.dart';
+import '../../models/schedule/day_schedule_model.dart';
+import '../../models/schedule/lesson_entry_model.dart';
+import '../../models/schedule/lesson_info.dart';
+import '../label_tag_widget.dart';
 import 'lesson_modal_bottom_sheet.dart';
 
 class LessonsWidget extends StatelessWidget {
-  static const double _listTileHeight = 80;
+  static const double _listTileHeight = 90;
 
   final DayScheduleModel? scheduleModel;
   final List<LessonBreakModel>? breaksModel;

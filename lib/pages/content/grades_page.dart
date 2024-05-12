@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_ceiti/widgets/grades_table_widget.dart';
+import 'package:my_ceiti/widgets/grades/grades_tab_selection_widget.dart';
+import 'package:my_ceiti/widgets/grades/grades_table_widget.dart';
 
 import '../../blocs/grade/grade_bloc.dart';
+import '../../widgets/grades/idnp_selection_widget.dart';
 
 class GradesPage extends StatefulWidget {
   const GradesPage({super.key});
@@ -36,8 +38,8 @@ class _GradesPageState extends State<GradesPage> {
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    IdnpSelectionWidget(),
                     TextField(
                       controller: _controller,
                       keyboardType: TextInputType.number,
@@ -51,8 +53,11 @@ class _GradesPageState extends State<GradesPage> {
                       child: Text(AppLocalizations.of(context)!.fetchGrades),
                     ),
                     SizedBox(height: 20),
-                    buildText(state),
-                    Text("Page $_selectedPageIndex"),
+                    Expanded(child: buildText(state)),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: GradesTabSelectionWidget(),
+                    ),
                   ],
                 ),
               ));
@@ -70,6 +75,8 @@ class _GradesPageState extends State<GradesPage> {
       );
     } else if (state is GradeError) {
       return Text('Error: ${state.error}');
+    } else if (state is GradeInitial) {
+      return Text('Initial');
     } else {
       return Text("error");
     }

@@ -8,33 +8,23 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+    return ListView(
+      children: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.appearance),
+          trailing: Icon(Icons.sunny),
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AppearanceSettingsPage()));
+          },
         ),
-      ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.appearance),
-            trailing: Icon(Icons.sunny),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AppearanceSettingsPage()));
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.language),
-            trailing: Icon(Icons.language),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LanguageSettingsPage()));
-            },
-          ),
-        ],
-      ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.language),
+          trailing: Icon(Icons.language),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LanguageSettingsPage()));
+          },
+        ),
+      ],
     );
   }
 }

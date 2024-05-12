@@ -1,7 +1,10 @@
 {
   "@@locale": "ru",
   "appTitle": "My CEITI",
-  "settings": "Настройки",
+  "appBarSchedule": "Расписание",
+  "appBarScheduleNoGroup": "Расписание групп",
+  "appBarGrades": "Оценки",
+  "appBarSettings": "Настройки",
   "appearance": "Внешний вид",
   "themeMode": "Режим темы",
   "lightTheme" : "Светлая",

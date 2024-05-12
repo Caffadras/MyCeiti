@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_ceiti/blocs/group/group_bloc.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 
-import '../../widgets/group_selection_widget.dart';
-import '../../widgets/schedule_widget.dart';
-import '../../widgets/week_day_selection_widget.dart';
+import '../../widgets/schedule/schedule_widget.dart';
+import '../../widgets/schedule/week_day_selection_widget.dart';
 
 /*
 {
@@ -33,17 +30,13 @@ class _SchedulePageState extends State<SchedulePage> {
         BlocProvider(
           create: (context) => ScheduleBloc(),
         ),
-        BlocProvider(
-          create: (context) => GroupBloc(),
-        ),
       ],
       child: const Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.only(bottom: 20.0, right: 10, left: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            GroupSelectionWidget(),
             Expanded(child: ScheduleWidget()),
             WeekDaySelectionWidget(),
           ],

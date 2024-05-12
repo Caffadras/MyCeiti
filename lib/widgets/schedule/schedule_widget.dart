@@ -8,8 +8,8 @@ import 'package:my_ceiti/models/schedule/lesson_break_model.dart';
 import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../models/schedule/day_schedule_model.dart';
-import '../services/schedule_service.dart';
+import '../../models/schedule/day_schedule_model.dart';
+import '../../services/schedule_service.dart';
 import 'lessons_widget.dart';
 
 class ScheduleWidget extends StatefulWidget {

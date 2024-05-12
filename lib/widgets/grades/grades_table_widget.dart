@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_ceiti/models/grades/semester_model.dart';
 
-import '../models/grades/subject_grades.dart';
+import '../../models/grades/subject_grades.dart';
 
 class GradesTableWidget extends StatefulWidget {
   final SemesterModel semesterModel;
@@ -14,7 +14,6 @@ class GradesTableWidget extends StatefulWidget {
 
 class _GradesTableWidgetState extends State<GradesTableWidget> {
   static const double _listTileHeight = 80;
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,7 @@ class _GradesTableWidgetState extends State<GradesTableWidget> {
                   ],
                 ),
               ),
-              _buildAverageGradeCard(subjectGrades, index, context),
+              _buildAvgGradeSection(subjectGrades, index, context),
             ],
           ),
         ),
@@ -79,7 +78,7 @@ class _GradesTableWidgetState extends State<GradesTableWidget> {
     );
   }
 
-  Widget _buildAverageGradeCard(
+  Widget _buildAvgGradeSection(
       SubjectGrades subjectGrades, int index, BuildContext context) {
     return Container(
       height: double.infinity,

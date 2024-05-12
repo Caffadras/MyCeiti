@@ -1,7 +1,10 @@
 {
   "@@locale": "en",
   "appTitle": "My CEITI",
-  "settings": "Settings",
+  "appBarSchedule": "Schedule",
+  "appBarScheduleNoGroup": "Group Schedule",
+  "appBarGrades": "Grades",
+  "appBarSettings": "Settings",
   "appearance": "Appearance",
   "themeMode": "Theme Mode",
   "lightTheme" : "Light",
@@ -26,5 +29,8 @@
   "aboutApp": "About The App",
   "enterIDNP": "Enter your IDNP",
   "fetchGrades": "Fetch Grades",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "semesterGradesTab": "Semester",
+  "examGradesTab": "Exam",
+  "yearGradesTab": "Year"
 }

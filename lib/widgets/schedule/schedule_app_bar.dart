@@ -6,14 +6,18 @@ import 'package:my_ceiti/main.dart';
 import 'package:my_ceiti/models/group_model.dart';
 import 'package:my_ceiti/services/group_service.dart';
 
-class GroupSelectionWidget extends StatefulWidget {
-  const GroupSelectionWidget({super.key});
+class ScheduleAppBarWidget extends StatefulWidget
+    implements PreferredSizeWidget {
+  const ScheduleAppBarWidget({super.key});
 
   @override
-  State<GroupSelectionWidget> createState() => _GroupSelectionWidgetState();
+  State<ScheduleAppBarWidget> createState() => _ScheduleAppBarWidgetState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
+class _ScheduleAppBarWidgetState extends State<ScheduleAppBarWidget> {
   final GroupService _groupService = getIt<GroupService>();
   String? selectedGroup;
 
@@ -22,47 +26,41 @@ class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
     return BlocBuilder<GroupBloc, GroupState>(
       builder: (context, state) {
         GroupBloc groupBloc = context.read<GroupBloc>();
-        if (state is GroupSelectedState) {
-          selectedGroup = state.selectedGroup.name;
-        }
-        return Card(
-          margin: EdgeInsets.symmetric(horizontal: 4),
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(15),
-            onTap: () async {
-              final selectedItemModel = await showDialog<GroupModel>(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    child: _buildDialogContent(context, groupBloc),
-                  );
-                },
-              );
-              if (selectedItemModel != null) {
-                setState(() {
-                  selectedGroup = selectedItemModel.name;
-                });
-              }
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      "Group: ${selectedGroup ?? ""}",
-                      style: TextStyle(fontSize: 18),
-                    )),
-              ],
+        return AppBar(
+          centerTitle: true,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(_getAppBarTitle(state, context)),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () async {
+                final selectedItemModel = await showDialog<GroupModel>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      child: _buildDialogContent(context, groupBloc),
+                    );
+                  },
+                );
+                if (selectedItemModel != null) {
+                  setState(() {
+                    selectedGroup = selectedItemModel.name;
+                  });
+                }
+              },
             ),
-          ),
+          ],
         );
       },
     );
+  }
+
+  String _getAppBarTitle(GroupState state, BuildContext context) {
+    if (state is GroupSelectedState) {
+      return "${state.selectedGroup.name} ${AppLocalizations.of(context)!.appBarSchedule}";
+    } else {
+      return AppLocalizations.of(context)!.appBarScheduleNoGroup;
+    }
   }
 
   Widget _buildDialogContent(BuildContext context, GroupBloc groupBloc) {
@@ -106,12 +104,6 @@ class _GroupSelectionWidgetState extends State<GroupSelectionWidget> {
   }
 
   Future<List<GroupModel>> fetchGroups() async {
-    // try {
-    //   await Future.delayed(Duration(seconds: 2));
-
     return await _groupService.fetchGroups();
-    // } catch (_) {
-    //   return [];
-    // }
   }
 }
