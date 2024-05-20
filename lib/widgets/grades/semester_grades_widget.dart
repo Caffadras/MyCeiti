@@ -3,31 +3,35 @@ import 'package:my_ceiti/models/grades/semester_model.dart';
 
 import '../../models/grades/subject_grades.dart';
 
-class GradesTableWidget extends StatefulWidget {
+class SemesterGradesWidget extends StatefulWidget {
   final SemesterModel semesterModel;
 
-  const GradesTableWidget({super.key, required this.semesterModel});
+  const SemesterGradesWidget({super.key, required this.semesterModel});
 
   @override
-  State<GradesTableWidget> createState() => _GradesTableWidgetState();
+  State<SemesterGradesWidget> createState() => _SemesterGradesWidgetState();
 }
 
-class _GradesTableWidgetState extends State<GradesTableWidget> {
+class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
   static const double _listTileHeight = 80;
 
   @override
   Widget build(BuildContext context) {
     List<SubjectGrades> grades = widget.semesterModel.subjectGrades;
-    return Expanded(
-      child: ListView.builder(
-        itemCount: grades.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 3),
-            child: _buildCard(index, grades[index], context),
-          );
-        },
-      ),
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: grades.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: _buildCard(index, grades[index], context),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -82,7 +86,6 @@ class _GradesTableWidgetState extends State<GradesTableWidget> {
       SubjectGrades subjectGrades, int index, BuildContext context) {
     return Container(
       height: double.infinity,
-
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(15),

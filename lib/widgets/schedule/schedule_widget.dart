@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_ceiti/blocs/group/group_bloc.dart';
 import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
-import 'package:my_ceiti/main.dart';
 import 'package:my_ceiti/models/schedule/lesson_break_model.dart';
 import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/schedule/day_schedule_model.dart';
-import '../../services/schedule_service.dart';
 import 'lessons_widget.dart';
 
 class ScheduleWidget extends StatefulWidget {
@@ -19,13 +17,10 @@ class ScheduleWidget extends StatefulWidget {
   State<ScheduleWidget> createState() => _ScheduleWidgetState();
 }
 
-class _ScheduleWidgetState extends State<ScheduleWidget>
-    with AutomaticKeepAliveClientMixin {
-  final ScheduleService _scheduleService = getIt<ScheduleService>();
+class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     int selectedDay = Provider.of<SelectedWeekDayProvider>(context).selectedDay;
     return BlocListener<GroupBloc, GroupState>(
       listener: (context, state){
@@ -81,7 +76,5 @@ class _ScheduleWidgetState extends State<ScheduleWidget>
       breaksModel: breaksModel,
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
+

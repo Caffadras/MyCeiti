@@ -26,5 +26,6 @@
   "selectGroupToSeeSchedule": "Пожалуйста, выберите группу, чтобы увидеть её расписание",
   "aboutApp": "О приложении",
   "enterIDNP": "Введите свой IDNP",
+  "enterIDNPVerbose": "Введите свой IDNP чтобы узнать оценки",
   "fetchGrades": "Узнать Оценки"
 }

@@ -52,18 +52,18 @@ class _IdnpSelectionWidgetState extends State<IdnpSelectionWidget> {
             //
           },
           // // keyboardType: TextInputType.numberWithOptions(),
-
-        suggestionsBuilder: (context, controller) {
-          return List<Container>.generate(5, (int index) {
-            final String item = 'item $index';
-            return Container(
-              child: Text(item),
-              // onTap: () {
-              //   controller.closeView(item);
-              // },
-            );
-          });
-        },),
+        suggestionsBuilder: (BuildContext context, SearchController controller) {
+          return [
+            ListTile(
+              title: Text("Test"),
+              onTap: () {
+                controller.closeView("Test");
+              },
+            ),
+          ];
+        },
+  // viewConstraints:
+      ),
     );
   }
 }

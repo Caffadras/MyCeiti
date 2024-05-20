@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_ceiti/pages/content/grades_page.dart';
 import 'package:my_ceiti/pages/content/shedule_page.dart';
 import 'package:my_ceiti/pages/settings/settings_page.dart';
+import 'package:my_ceiti/providers/seleceted_grades_tab_provider.dart';
 import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:my_ceiti/widgets/grades/grades_app_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../blocs/grade/grade_bloc.dart';
 import '../blocs/group/group_bloc.dart';
 import '../widgets/schedule/schedule_app_bar.dart';
 import '../widgets/settings_app_bar.dart';
@@ -36,10 +38,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GroupBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GroupBloc(),
+        ),
+        BlocProvider(
+          create: (context) => GradeBloc(),
+        ),
+      ],
       child: Scaffold(
-        // resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         appBar: _appBars[_selectedPageIndex],
         bottomNavigationBar: NavigationBar(
           height: 75,
@@ -129,8 +138,16 @@ class _HomePageState extends State<HomePage> {
         //     ],
         //   ),
         // ),
-        body: ChangeNotifierProvider(
-          create: (BuildContext context) => SelectedWeekDayProvider(),
+        body: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<SelectedWeekDayProvider>(
+              create: (context) => SelectedWeekDayProvider(),
+            ),
+            ChangeNotifierProvider<SelectedGradesTabProvider>(
+              create: (context) => SelectedGradesTabProvider(),
+            ),
+            // Add more providers as needed
+          ],
           child: PageTransitionSwitcher(
             duration: const Duration(milliseconds: 300),
             reverse: _selectedPageIndex == 0,

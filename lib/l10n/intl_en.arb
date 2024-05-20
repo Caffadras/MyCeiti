@@ -28,6 +28,7 @@
   "selectGroup": "Select Group",
   "aboutApp": "About The App",
   "enterIDNP": "Enter your IDNP",
+  "enterIDNPVerbose": "Enter your IDNP to see Grades",
   "fetchGrades": "Fetch Grades",
   "cancel": "Cancel",
   "semesterGradesTab": "Semester",
