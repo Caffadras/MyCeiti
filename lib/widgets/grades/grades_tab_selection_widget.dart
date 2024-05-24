@@ -13,7 +13,7 @@ class GradesTabSelectionWidget extends StatefulWidget {
 }
 
 class _GradesTabSelectionWidgetState extends State<GradesTabSelectionWidget> {
-  GradeTabs selectedPage = GradeTabs.semester;
+  GradeTabs _selectedTab = GradeTabs.semester;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,13 @@ class _GradesTabSelectionWidgetState extends State<GradesTabSelectionWidget> {
   }
 
   Widget _buildSegmentedButton(){
+    _selectedTab = Provider.of<SelectedGradesTabProvider>(context).selectedTab;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SegmentedButton<GradeTabs>(
           style: ButtonStyle(
-            visualDensity: VisualDensity(horizontal: 3, vertical: -1),
+            visualDensity: VisualDensity(horizontal: 3),
           ),
           showSelectedIcon: false,
           segments: <ButtonSegment<GradeTabs>>[
@@ -40,11 +41,11 @@ class _GradesTabSelectionWidgetState extends State<GradesTabSelectionWidget> {
                 value: GradeTabs.year,
                 label: Text(AppLocalizations.of(context)!.yearGradesTab)),
           ],
-          selected: <GradeTabs>{selectedPage},
+          selected: <GradeTabs>{_selectedTab},
           onSelectionChanged: (Set<GradeTabs> newSelection) {
             setState(() {
               SelectedGradesTabProvider provider = context.read<SelectedGradesTabProvider>();
-              selectedPage = newSelection.first;
+              _selectedTab = newSelection.first;
               provider.updateSelectedTab(newSelection.first);
             });
           },

@@ -5,16 +5,6 @@ import 'package:my_ceiti/blocs/schedule/schedule_bloc.dart';
 import '../../widgets/schedule/schedule_widget.dart';
 import '../../widgets/schedule/week_day_selection_widget.dart';
 
-/*
-{
-        "_id": "65e9fae66fff9d77b67fb542",
-        "id": "D612397E79E6DD3A",
-        "name": "P-2043R",
-        "diriginte": {
-            "name": "Carp A."
-        }
-    },
- */
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
 

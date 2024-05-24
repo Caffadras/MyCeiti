@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_ceiti/models/grades/semester_model.dart';
 
-import '../../models/grades/subject_grades.dart';
+import '../../../models/grades/subject_grades.dart';
 
 class SemesterGradesWidget extends StatefulWidget {
   final SemesterModel semesterModel;

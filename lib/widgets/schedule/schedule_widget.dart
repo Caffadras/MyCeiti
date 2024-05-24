@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,6 +9,7 @@ import 'package:my_ceiti/providers/selected_week_day_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/schedule/day_schedule_model.dart';
+import '../../utils/animations_util.dart';
 import 'lessons_widget.dart';
 
 class ScheduleWidget extends StatefulWidget {
@@ -18,10 +20,12 @@ class ScheduleWidget extends StatefulWidget {
 }
 
 class _ScheduleWidgetState extends State<ScheduleWidget> {
-
+  int _selectedDay = 0;
+  int _previousDay = 0;
   @override
   Widget build(BuildContext context) {
-    int selectedDay = Provider.of<SelectedWeekDayProvider>(context).selectedDay;
+    _previousDay = _selectedDay;
+    _selectedDay = Provider.of<SelectedWeekDayProvider>(context).selectedDay;
     return BlocListener<GroupBloc, GroupState>(
       listener: (context, state){
         if (state is GroupSelectedState) {
@@ -35,7 +39,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
           } else if (state is ScheduleLoading) {
             return _buildLoadingIndicator();
           } else if (state is ScheduleLoaded) {
-            return _buildActualSchedule(state, selectedDay);
+            return _buildActualSchedule(state, _selectedDay);
           } else if (state is ScheduleTimeout) {
             return Text(AppLocalizations.of(context)!.scheduleNetworkTimeout);
           } else if (state is ScheduleError) {
@@ -71,9 +75,15 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   Widget _buildActualSchedule(ScheduleLoaded state, int selectedDay) {
     DayScheduleModel schedule = state.schedule.weekScheduleMap[selectedDay]!;
     List<LessonBreakModel> breaksModel = state.schedule.lessonBreakModels;
-    return LessonsWidget(
-      scheduleModel: schedule,
-      breaksModel: breaksModel,
+    return PageTransitionSwitcher(
+      duration: const Duration(milliseconds: 300),
+      reverse: _previousDay > selectedDay,
+      transitionBuilder: AnimationsUtil.sharedAxisTransition,
+      child: LessonsWidget(
+        key: ValueKey<int>(selectedDay),//todo investigate
+        scheduleModel: schedule,
+        breaksModel: breaksModel,
+      ),
     );
   }
 }

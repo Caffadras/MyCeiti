@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../blocs/grade/grade_bloc.dart';
 import '../blocs/group/group_bloc.dart';
+import '../utils/animations_util.dart';
 import '../widgets/schedule/schedule_app_bar.dart';
 import '../widgets/settings_app_bar.dart';
 
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage> {
           child: PageTransitionSwitcher(
             duration: const Duration(milliseconds: 300),
             reverse: _selectedPageIndex == 0,
-            transitionBuilder: _sharedAxisTransition,
+            transitionBuilder: AnimationsUtil.sharedAxisTransition,
             child: _pages[_selectedPageIndex],
           ),
         ),
@@ -163,15 +164,5 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedPageIndex = idx;
     });
-  }
-
-  Widget _sharedAxisTransition(Widget child, Animation<double> primaryAnimation,
-      Animation<double> secondaryAnimation) {
-    return SharedAxisTransition(
-      animation: primaryAnimation,
-      secondaryAnimation: secondaryAnimation,
-      transitionType: SharedAxisTransitionType.horizontal,
-      child: child,
-    );
   }
 }
