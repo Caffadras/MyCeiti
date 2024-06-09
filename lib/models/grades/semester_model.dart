@@ -1,14 +1,21 @@
 import 'package:my_ceiti/models/grades/absences_model.dart';
-import 'package:my_ceiti/models/grades/subject_grades.dart';
+import 'package:my_ceiti/models/grades/personal_info_model.dart';
+import 'package:my_ceiti/models/grades/subject_grades_model.dart';
+
+import 'exam_grades_model.dart';
 
 class SemesterModel {
-  final List<SubjectGrades> subjectGrades;
+
+  final PersonalInfoModel personalInfoModel;
+  final List<SubjectGradesModel> subjectGrades;
+  final List<ExamGradesModel> examGrades;
   final AbsencesModel absencesModel;
 
-  SemesterModel(this.subjectGrades, this.absencesModel);
+  SemesterModel(this.personalInfoModel, this.subjectGrades, this.absencesModel, this.examGrades);
 
   @override
   String toString() {
-    return 'SemesterModel{subjectGrades: $subjectGrades, absencesModel: $absencesModel}';
+    //personalInfoModel: $personalInfoModel, subjectGrades: $subjectGrades, absencesModel: $absencesModel,
+    return 'SemesterModel{examGrades: $examGrades}';
   }
 }

@@ -23,7 +23,7 @@ class _GradesAppBarWidgetState extends State<GradesAppBarWidget> {
         return AppBar(
           centerTitle: true,
           // backgroundColor: Theme.of(context).colorScheme.surface,
-          title: Text(_buildAppBarText(context)),
+          title: Text(_buildAppBarText(context, state)),
           actions: [
             _buildSearchAnchor(context),
 
@@ -39,8 +39,15 @@ class _GradesAppBarWidgetState extends State<GradesAppBarWidget> {
     );
   }
 
-  String _buildAppBarText(BuildContext context) =>
-      AppLocalizations.of(context)!.appBarGrades;
+  String _buildAppBarText(BuildContext context, GradeState state) {
+    if (state is GradeLoaded) {
+      String? lastName = state.response.personalInfoModel.lastName;
+      if (lastName != null) {
+        return '${AppLocalizations.of(context)!.appBarGrades}: $lastName';
+      }
+    }
+    return AppLocalizations.of(context)!.appBarGrades;
+  }
 
   Widget _buildSearchAnchor(BuildContext context) {
     GradeBloc gradeBloc = context.read<GradeBloc>();
@@ -66,7 +73,6 @@ class _GradesAppBarWidgetState extends State<GradesAppBarWidget> {
         },
         viewOnChanged: (text) {
           _controller.text = _validateInput(text);
-          print(_validateInput(text));
         },
         suggestionsBuilder:
             (BuildContext context, SearchController controller) {

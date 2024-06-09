@@ -4,7 +4,9 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_ceiti/pages/home_page.dart';
 import 'package:my_ceiti/providers/locale_provider.dart';
+import 'package:my_ceiti/services/date_time_service.dart';
 import 'package:my_ceiti/services/group_service.dart';
+import 'package:my_ceiti/services/parser_service.dart';
 import 'package:my_ceiti/services/schedule_service.dart';
 import 'package:provider/provider.dart';
 import 'package:theme_manager/theme_manager.dart';
@@ -14,6 +16,8 @@ final getIt = GetIt.instance;
 void setup(){
   getIt.registerSingleton<ScheduleService>(ScheduleService());
   getIt.registerSingleton<GroupService>(GroupService());
+  getIt.registerSingleton<DateTimeService>(DateTimeService());
+  getIt.registerSingleton<ParserService>(ParserService());
 }
 
 void main() async {

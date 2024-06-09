@@ -21,6 +21,7 @@ class GradeBloc extends Bloc<GradeEvent, GradeState> {
     emit(GradeLoading());
 
     // var name = await gradesService.performLogin(event.idnp);
+    //todo: try catch block
     SemesterModel semesterModel = await gradesService.parse();
 
     emit(GradeLoaded(response: semesterModel));

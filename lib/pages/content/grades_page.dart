@@ -10,7 +10,10 @@ import 'package:provider/provider.dart';
 
 import '../../blocs/grade/grade_bloc.dart';
 import '../../enums/grades_tab_enum.dart';
+import '../../main.dart';
+import '../../models/example_response.dart';
 import '../../providers/seleceted_grades_tab_provider.dart';
+import '../../services/parser_service.dart';
 import '../../utils/animations_util.dart';
 
 class GradesPage extends StatefulWidget {
@@ -21,6 +24,7 @@ class GradesPage extends StatefulWidget {
 }
 
 class _GradesPageState extends State<GradesPage> {
+  final parserService = getIt<ParserService>();
   final TextEditingController _controller = TextEditingController();
   GradeTabs? _selectedTab;
   GradeTabs? _previousTab;
@@ -42,7 +46,7 @@ class _GradesPageState extends State<GradesPage> {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 20.0, right: 10, left: 10),
+            padding: const EdgeInsets.only(bottom: 10.0, right: 10, left: 10),
             child: Column(
               children: [
                 Expanded(child: _buildMainSection(state)),
@@ -59,6 +63,9 @@ class _GradesPageState extends State<GradesPage> {
   }
 
   Widget _buildMainSection(GradeState state) {
+    //todo temp
+    parserService.parseResponse(ExampleResponse.exampleResponse, false);
+
     if (state is GradeLoading) {
       return CircularProgressIndicator();
     } else if (state is GradeLoaded) {

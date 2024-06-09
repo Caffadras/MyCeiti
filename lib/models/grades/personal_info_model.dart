@@ -1,0 +1,12 @@
+class PersonalInfoModel {
+  final String? firstName;
+  final String? lastName;
+  final String? year;
+
+  PersonalInfoModel(this.firstName, this.lastName, this.year);
+
+  @override
+  String toString() {
+    return 'PersonalInfoModel{firstName: $firstName, lastName: $lastName, year: $year}';
+  }
+}

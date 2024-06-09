@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_ceiti/models/grades/semester_model.dart';
 
-import '../../../models/grades/subject_grades.dart';
+import '../../../models/grades/subject_grades_model.dart';
 
 class SemesterGradesWidget extends StatefulWidget {
   final SemesterModel semesterModel;
@@ -17,7 +17,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<SubjectGrades> grades = widget.semesterModel.subjectGrades;
+    List<SubjectGradesModel> grades = widget.semesterModel.subjectGrades;
     return Column(
       children: [
         Expanded(
@@ -36,7 +36,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
   }
 
   Widget _buildCard(
-      int index, SubjectGrades subjectGrades, BuildContext context) {
+      int index, SubjectGradesModel subjectGrades, BuildContext context) {
     return Card(
       // clipBehavior: Clip.antiAlias,
       elevation: 3,
@@ -49,7 +49,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
 
   //todo remove index param
   Widget _buildCardWithInkWell(
-      SubjectGrades subjectGrades, BuildContext context, int index) {
+      SubjectGradesModel subjectGrades, BuildContext context, int index) {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       child: IntrinsicHeight(
@@ -83,7 +83,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
   }
 
   Widget _buildAvgGradeSection(
-      SubjectGrades subjectGrades, int index, BuildContext context) {
+      SubjectGradesModel subjectGrades, int index, BuildContext context) {
     return Container(
       height: double.infinity,
       decoration: BoxDecoration(
