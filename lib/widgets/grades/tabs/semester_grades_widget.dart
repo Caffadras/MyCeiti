@@ -26,7 +26,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 3),
-                child: _buildCard(index, grades[index], context),
+                child: _buildCard(grades[index], context),
               );
             },
           ),
@@ -35,21 +35,20 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
     );
   }
 
-  Widget _buildCard(
-      int index, SubjectGradesModel subjectGrades, BuildContext context) {
+  Widget _buildCard(SubjectGradesModel subjectGrades, BuildContext context) {
     return Card(
       // clipBehavior: Clip.antiAlias,
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      child: _buildCardWithInkWell(subjectGrades, context, index),
+      child: _buildCardWithInkWell(subjectGrades, context),
     );
   }
 
   //todo remove index param
   Widget _buildCardWithInkWell(
-      SubjectGradesModel subjectGrades, BuildContext context, int index) {
+      SubjectGradesModel subjectGrades, BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       child: IntrinsicHeight(
@@ -74,7 +73,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
                   ],
                 ),
               ),
-              _buildAvgGradeSection(subjectGrades, index, context),
+              _buildAvgGradeSection(subjectGrades, context),
             ],
           ),
         ),
@@ -83,7 +82,7 @@ class _SemesterGradesWidgetState extends State<SemesterGradesWidget> {
   }
 
   Widget _buildAvgGradeSection(
-      SubjectGradesModel subjectGrades, int index, BuildContext context) {
+      SubjectGradesModel subjectGrades, BuildContext context) {
     return Container(
       height: double.infinity,
       decoration: BoxDecoration(

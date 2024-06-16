@@ -51,7 +51,7 @@ class GradesService {
   }
 
   Future<SemesterModel> parse() async{
-    return await parserService.parseResponse(ExampleResponse.exampleResponse, false);
+    return await parserService.parseResponse(ExampleResponse.exampleResponse2, false);
   }
 
   

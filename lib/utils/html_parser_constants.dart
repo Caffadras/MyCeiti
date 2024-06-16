@@ -1,7 +1,12 @@
 class ParserConstants{
-  static const String firstSemesterGradesId = 'collaps3e1';
-  static const String secondSemesterGradesId = 'collaps3e2';
-  static const String personalInfoId = 'date-personale';
+  static const String firstSemesterGradesDivId = 'collaps3e1';
+  static const String secondSemesterGradesDivId = 'collaps3e2';
+  static const String personalInfoDivId = 'date-personale';
 
-  static const String annualGradesId = 'collapse';
+  // + 0-7 as semester
+  static const String examGradesDivId = 'collapse';
+
+  // + 0-3 as year
+  static const String annualGradesDivId = 'collaps2e';
+
 }

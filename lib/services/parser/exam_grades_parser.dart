@@ -10,17 +10,15 @@ import '../date_time_service.dart';
 class ExamGradesParser{
   final DateTimeService dateTimeService = getIt<DateTimeService>();
 
-  List<ExamGradesModel> parse(Document document, String? stringYear){
-    List<ExamGradesModel> annualGradesList = [];
-    //todo temp
-    // int year = _yearToInt(stringYear) ?? 1;
-    int year = 3;
+  List<ExamGradesModel> parse(Document document, int? year){
+    List<ExamGradesModel> examGradesList = [];
+    year ??= 1;
     int htmlIdPostfix = dateTimeService.isFirstSemester() ? year * 2 - 2 : year * 2 - 1;
-    String annualGradesId = ParserConstants.annualGradesId + htmlIdPostfix.toString();
-    Element? annualGradesDiv = document.getElementById(annualGradesId);
-    if (annualGradesDiv != null){
-      List<Element> annualGradesRows = annualGradesDiv.getElementsByTagName("tr");
-      for (Element row in annualGradesRows){
+    String examGradesId = ParserConstants.examGradesDivId + htmlIdPostfix.toString();
+    Element? examGradesDiv = document.getElementById(examGradesId);
+    if (examGradesDiv != null){
+      List<Element> examGradesRows = examGradesDiv.getElementsByTagName("tr");
+      for (Element row in examGradesRows){
         List<Element> cols = row.getElementsByTagName("td");
 
         if (cols.length == 2){
@@ -28,32 +26,32 @@ class ExamGradesParser{
           String? subjectName = _extractSubjectName(fullSubjectName);
           String? examGradeString = cols[1].getElementsByTagName('p').safeGet(0)?.innerHtml;
           double? examGrade = examGradeString == null ? null : double.tryParse(examGradeString);
-          ExamType examType = _parseExamType(fullSubjectName!);
-          ExamGradesModel examGradesModel = ExamGradesModel(subjectName, examGrade, examType);
+          ExamTypeEnum examType = _parseExamType(fullSubjectName!);
+          ExamGradesModel examGradesModel = ExamGradesModel(fullSubjectName, subjectName, examGrade, examType);
           print(examGradesModel);
-          annualGradesList.add(examGradesModel);
+          examGradesList.add(examGradesModel);
         }
       }
     } else {
-      print("Annual grades div is null");
+      print("Exam grades div is null");
     }
-    return annualGradesList;
+    return examGradesList;
   }
   //
 
-  ExamType _parseExamType(String subjectName) {
+  ExamTypeEnum _parseExamType(String subjectName) {
     subjectName = subjectName.trim();
 
     if (subjectName.startsWith('(Examen)')) {
-      return ExamType.exam;
+      return ExamTypeEnum.exam;
     } else if (subjectName.startsWith('(Teza)')) {
-      return ExamType.teza;
+      return ExamTypeEnum.teza;
     } else if (subjectName.startsWith('(Practica)')) {
-      return ExamType.practica;
+      return ExamTypeEnum.practica;
     }
 
     print("--- subjectName: $subjectName does not have exam type");
-    return ExamType.undefined;
+    return ExamTypeEnum.undefined;
   }
 
 

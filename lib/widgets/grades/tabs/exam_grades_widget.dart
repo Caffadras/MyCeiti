@@ -13,7 +13,8 @@ class ExamGradesWidget extends StatefulWidget {
 }
 
 class _ExamGradesWidgetState extends State<ExamGradesWidget> {
-  static const double _listTileHeight = 80;
+  static const double _listTileHeight = 70;
+  static const double _gradeSectionWidth = 65;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class _ExamGradesWidgetState extends State<ExamGradesWidget> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 3),
-                child: _buildCard(index, grades[index], context),
+                child: _buildCard(grades[index], context),
               );
             },
           ),
@@ -35,21 +36,18 @@ class _ExamGradesWidgetState extends State<ExamGradesWidget> {
     );
   }
 
-  Widget _buildCard(
-      int index, ExamGradesModel examGrades, BuildContext context) {
+  Widget _buildCard(ExamGradesModel examGrades, BuildContext context) {
     return Card(
-      // clipBehavior: Clip.antiAlias,
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      child: _buildCardWithInkWell(examGrades, context, index),
+      child: _buildCardWithInkWell(examGrades, context),
     );
   }
 
-  //todo remove index param
   Widget _buildCardWithInkWell(
-      ExamGradesModel examGrades, BuildContext context, int index) {
+      ExamGradesModel examGrades, BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       child: IntrinsicHeight(
@@ -65,14 +63,14 @@ class _ExamGradesWidgetState extends State<ExamGradesWidget> {
                   children: [
                     Text(
                       //todo
-                      examGrades.subjectName ?? "",
+                      examGrades.fullSubjectName ?? "",
 
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
               ),
-              _buildGradeSection(examGrades.grade, index, context),
+              _buildGradeSection(examGrades.grade, context),
             ],
           ),
         ),
@@ -81,9 +79,10 @@ class _ExamGradesWidgetState extends State<ExamGradesWidget> {
   }
 
   Widget _buildGradeSection(
-      double? grade, int index, BuildContext context) {
+      double? grade, BuildContext context) {
     return Container(
       height: double.infinity,
+      width: _gradeSectionWidth,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(15),
@@ -94,10 +93,10 @@ class _ExamGradesWidgetState extends State<ExamGradesWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            grade?.toStringAsPrecision(3) ?? "N/A",
+            grade?.toStringAsPrecision(3) ?? "- - -",
             style: TextStyle(
               color: Colors.black,
-              fontSize: 23,
+              fontSize: 22,
               fontWeight: FontWeight.normal,
             ),
           ),

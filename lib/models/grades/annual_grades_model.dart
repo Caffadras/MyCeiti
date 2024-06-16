@@ -1,3 +1,5 @@
+
+
 class AnnualGradesModel {
   final String? subject;
   final String? firstSemesterGrade;
@@ -14,4 +16,9 @@ class AnnualGradesModel {
     this.annualGrade,
     this.examType,
   });
+
+  @override
+  String toString() {
+    return 'AnnualGradesModel{subject: $subject, firstSemesterGrade: $firstSemesterGrade, secondSemesterGrade: $secondSemesterGrade, examGrade: $examGrade, annualGrade: $annualGrade, examType: $examType}';
+  }
 }

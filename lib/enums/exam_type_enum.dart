@@ -1,4 +1,4 @@
-enum ExamType{
+enum ExamTypeEnum{
   undefined,
   exam,
   teza,

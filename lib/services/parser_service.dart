@@ -1,11 +1,14 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:my_ceiti/models/grades/absences_model.dart';
+import 'package:my_ceiti/models/grades/annual_grades_model.dart';
 import 'package:my_ceiti/models/grades/exam_grades_model.dart';
 import 'package:my_ceiti/models/grades/personal_info_model.dart';
 import 'package:my_ceiti/models/grades/semester_model.dart';
 import 'package:my_ceiti/services/date_time_service.dart';
+import 'package:my_ceiti/services/parser/annual_grades_parser.dart';
 import 'package:my_ceiti/services/parser/exam_grades_parser.dart';
+import 'package:my_ceiti/services/parser/personal_info_parser.dart';
 
 import '../main.dart';
 import '../models/grades/subject_grades_model.dart';
@@ -21,33 +24,35 @@ class ParserService {
   final DateTimeService dateTimeService = getIt<DateTimeService>();
 
   final ExamGradesParser examGradesParser = ExamGradesParser();
+  final PersonalInfoParser personalInfoParser = PersonalInfoParser();
+  final AnnualGradesParser annualGradesParser = AnnualGradesParser();
 
   Future<SemesterModel> parseResponse(
       String response, bool firstSemester) async {
     String selectedSemester = firstSemester
-        ? ParserConstants.firstSemesterGradesId
-        : ParserConstants.secondSemesterGradesId;
+        ? ParserConstants.firstSemesterGradesDivId
+        : ParserConstants.secondSemesterGradesDivId;
 
     Document document = parse(response);
 
-    Element personalInfoDiv = document.getElementById(ParserConstants.personalInfoId)!;
+    Element personalInfoDiv = document.getElementById(ParserConstants.personalInfoDivId)!;
 
     Element semesterDiv = document.getElementById(selectedSemester)!;
     Element gradesTable = semesterDiv.getElementsByTagName("table")[0];
     List<Element> gradesRows = gradesTable.getElementsByTagName("tr");
 
-    // gradesTable.
-    print(gradesRows);
-
-    PersonalInfoModel personalInfoModel = _parsePersonalInfo(personalInfoDiv);
+    PersonalInfoModel personalInfoModel = personalInfoParser.parse(personalInfoDiv);
 
     List<ExamGradesModel> examGradesList =
-        examGradesParser.parse(document, personalInfoModel.year);
+        examGradesParser.parse(document, personalInfoModel.numYear);
+
+    List<AnnualGradesModel> annualGradesList = annualGradesParser.parse(document, personalInfoModel.numYear);
 
     List<SubjectGradesModel> subjectGradesList = _parseSubjectGrades(gradesRows);
     AbsencesModel absencesModel = _parseAbsences(gradesRows);
 
-    var semesterModel = SemesterModel(personalInfoModel, subjectGradesList, absencesModel, examGradesList);
+    var semesterModel = SemesterModel(personalInfoModel, subjectGradesList, absencesModel, examGradesList, annualGradesList);
+
     print("#");
     print("#");
     print("#");
@@ -55,49 +60,6 @@ class ParserService {
     return semesterModel;
   }
 
-  String _extractSubjectName(String fullString) {
-    // Trim leading and trailing white spaces
-    fullString = fullString.trim();
-
-    // Check if the string starts with '(' and has a closing ')'
-    if (fullString.startsWith('(')) {
-      int endIndex = fullString.indexOf(')');
-      if (endIndex != -1) {
-        // Remove the type in parentheses and any leading spaces after it
-        return fullString.substring(endIndex + 1).trim();
-      }
-    }
-
-    // If no valid pattern is found, return the full string
-    return fullString;
-  }
-
-
-  PersonalInfoModel _parsePersonalInfo(Element personalInfoDiv) {
-    List<Element> personalInfoTableRows =
-        personalInfoDiv.getElementsByTagName("tr");
-
-    String? lastName = personalInfoTableRows
-        .safeGet(0)
-        ?.getElementsByTagName("td")
-        .safeGet(0)
-        ?.innerHtml;
-
-    String? firstName = personalInfoTableRows
-        .safeGet(1)
-        ?.getElementsByTagName("td")
-        .safeGet(0)
-        ?.innerHtml;
-
-    String? year = personalInfoTableRows
-        .safeGet(3)
-        ?.getElementsByTagName("td")
-        .safeGet(0)
-        ?.innerHtml;
-
-
-    return PersonalInfoModel(firstName, lastName, year);
-  }
 
   AbsencesModel _parseAbsences(List<Element> rows) {
     int startingIdx = rows.length - 4;
@@ -157,18 +119,4 @@ class ParserService {
         .toList();
   }
 
-  int? _yearToInt(String? year){
-    if (year == null) return null;
-    switch (year){
-      case "I":
-        return 1;
-      case "II":
-        return 2;
-      case "III":
-        return 3;
-      case "IV":
-        return 4;
-    }
-    return null;
-  }
 }

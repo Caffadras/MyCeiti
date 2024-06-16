@@ -9,7 +9,7 @@ class LabelTag extends StatelessWidget {
   final EdgeInsets margin;
   final double borderRadius;
 
-  LabelTag({
+  const LabelTag({
     Key? key,
     required this.label,
     this.backgroundColor = Colors.blue,

@@ -64,7 +64,7 @@ class _GradesPageState extends State<GradesPage> {
 
   Widget _buildMainSection(GradeState state) {
     //todo temp
-    parserService.parseResponse(ExampleResponse.exampleResponse, false);
+    parserService.parseResponse(ExampleResponse.exampleResponse2, false);
 
     if (state is GradeLoading) {
       return CircularProgressIndicator();

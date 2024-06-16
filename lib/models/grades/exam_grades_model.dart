@@ -1,10 +1,11 @@
 import '../../enums/exam_type_enum.dart';
 
 class ExamGradesModel{
+  final String? fullSubjectName;
   final String? subjectName;
   final double? grade;
-  final ExamType? examType;
-  ExamGradesModel(this.subjectName, this.grade, this.examType);
+  final ExamTypeEnum? examType;
+  ExamGradesModel(this.fullSubjectName, this.subjectName, this.grade, this.examType);
 
   @override
   String toString() {
